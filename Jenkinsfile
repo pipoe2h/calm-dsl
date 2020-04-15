@@ -6,8 +6,12 @@ pipeline {
       yamlFile 'build-pod.yaml'
       defaultContainer 'calm-dsl'
     }
-
   }
+
+  // environment {
+  //       PC_IP = "bar"
+  // }
+
   stages {
     stage('Print Message') {
       steps {
@@ -16,10 +20,16 @@ pipeline {
     }
 
     stage('Test') {
+      input {
+        parameters {
+          string(name: 'PC_IP', defaultValue: '192.168.2.50', description: 'Prism Central IP address')
+        }
+      }
       steps {
         sh '''
           ls -la
-          calm init dsl -h
+          echo ${env.PC_IP}
+          calm init dsl -i ${env.PC_IP}
         '''
       }
     }
