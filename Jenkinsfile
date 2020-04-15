@@ -3,7 +3,7 @@ pipeline {
     kubernetes {
       label 'pod-dind'
       defaultContainer 'dind'
-      yaml """
+      yaml '''
 apiVersion: v1
 kind: Pod
 metadata:
@@ -18,8 +18,8 @@ spec:
     command:
     - cat
     tty: true
-"""
-}
+'''
+    }
 
   }
   stages {
@@ -31,9 +31,10 @@ spec:
 
     stage('Test') {
       steps {
-        container('calm-dsl'){
+        container(name: 'calm-dsl') {
           sh 'calm'
         }
+
       }
     }
 
