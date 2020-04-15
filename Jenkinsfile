@@ -1,10 +1,11 @@
 pipeline {
   agent {
-    docker {
-      image 'ntnx/calm-dsl'
-    }
-
+      kubernetes {
+          label 'pod-dind'
+          defaultContainer 'ntnx/calm-dsl'
+      }
   }
+
   stages {
     stage('Print Message') {
       steps {
