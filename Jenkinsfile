@@ -17,7 +17,7 @@ pipeline {
 
     stage('Test') {
       steps {
-        sh 'calm'
+        sh 'calm init dsl'
       }
     }
 
