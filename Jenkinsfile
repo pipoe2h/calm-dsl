@@ -1,8 +1,8 @@
 pipeline {
   agent {
     kubernetes {
-      label 'default'
-      defaultContainer 'jnlp'
+      label 'pod-dind'
+      defaultContainer 'dind'
       yaml '''
 apiVersion: v1
 kind: Pod
