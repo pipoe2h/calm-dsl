@@ -21,6 +21,7 @@ pipeline {
 
     stage('Test') {
       input {
+        message ''
         parameters {
           string(name: 'PC_IP', defaultValue: '192.168.2.50', description: 'Prism Central IP address')
         }
