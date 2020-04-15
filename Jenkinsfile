@@ -1,27 +1,13 @@
 pipeline {
   agent {
     kubernetes {
-      label 'jenkins-jenkins-slave'
-      defaultContainer 'jnlp'
-      yaml '''
-apiVersion: v1
-kind: Pod
-metadata:
-labels:
-  component: ci
-spec:
-  # Use service account that can deploy to all namespaces
-  serviceAccountName: cd-jenkins
-  containers:
-  - name: calm-dsl
-    image: ntnx/calm-dsl:latest
-    command:
-    - cat
-    tty: true
-'''
+      label 'dsl-app'  // all your pods will be named with this prefix, followed by a unique id
+      idleMinutes 5  // how long the pod will live after no jobs have run on it
+      yamlFile 'build-pod.yaml'  // path to the pod definition relative to the root of our project 
+      defaultContainer 'calm-dsl'  // define a default container if more than a few stages use it, will default to jnlp container
     }
-
   }
+
   stages {
     stage('Print Message') {
       steps {
@@ -31,10 +17,7 @@ spec:
 
     stage('Test') {
       steps {
-        container(name: 'calm-dsl') {
-          sh 'calm'
-        }
-
+        sh 'calm'
       }
     }
 
