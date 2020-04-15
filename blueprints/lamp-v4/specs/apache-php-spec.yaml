@@ -23,7 +23,7 @@ resources:
         users:
         - name: centos
           ssh-authorized-keys:
-          - '@@{CENTOS.public_key}@@'
+          - '@@{CENTOS.secret}@@'
           sudo:
           - ALL=(ALL) NOPASSWD:ALL
   memory_size_mib: 4096
