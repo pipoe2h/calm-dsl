@@ -3,11 +3,8 @@ import os
 from calm.dsl.builtins import Service, Package, Substrate
 from calm.dsl.builtins import Deployment, Profile, Blueprint
 from calm.dsl.builtins import CalmVariable as Variable
-from calm.dsl.builtins import CalmTask as Task
-from calm.dsl.builtins import action, parallel, ref, basic_cred
-from calm.dsl.builtins import read_local_file, read_provider_spec, read_spec, read_file
-from calm.dsl.builtins import vm_disk_package, AhvVmDisk, AhvVmNic
-from calm.dsl.builtins import AhvVmGC, AhvVmResources, AhvVm
+from calm.dsl.builtins import action, ref, basic_cred
+from calm.dsl.builtins import read_local_file, read_provider_spec, read_file
 
 # Windows Credentials
 WINDOWS_USER = "Administrator"
