@@ -1,0 +1,47 @@
+name: jg-vdi_@@{calm_application_name}@@-@@{calm_array_index}@@
+resources:
+  boot_config:
+    boot_device:
+      disk_address:
+        adapter_type: IDE
+        device_index: 0
+  disk_list:
+  - data_source_reference:
+      kind: image
+      name: WinSvr_2016
+      uuid: bd9fd2af-b9da-45a2-89bf-260f0021a575
+    device_properties:
+      device_type: CDROM
+      disk_address:
+        adapter_type: IDE
+        device_index: 0
+    disk_size_mib: 0
+  - data_source_reference:
+      kind: image
+      name: Nutanix-VirtIO-1.1.5.iso
+      uuid: 0eb20050-3c50-4593-b705-34af2c7cfd4a
+    device_properties:
+      device_type: CDROM
+      disk_address:
+        adapter_type: IDE
+        device_index: 1
+    disk_size_mib: 0
+  - device_properties:
+      device_type: DISK
+      disk_address:
+        adapter_type: SCSI
+        device_index: 0
+    disk_size_mib: 61440
+  guest_customization:
+    sysprep:
+      install_type: FRESH
+  memory_size_mib: 6144
+  nic_list:
+  - network_function_nic_type: INGRESS
+    nic_type: NORMAL_NIC
+    subnet_reference:
+      kind: subnet
+      name: dnd-jose.gomez
+      uuid: e28bce98-3eef-4be7-8df9-bf9726dccba2
+  num_sockets: 1
+  num_vcpus_per_socket: 2

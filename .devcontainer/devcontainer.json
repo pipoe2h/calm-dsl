@@ -33,7 +33,7 @@
 
 	// 
 	"mounts": [
-		"source=${localWorkspaceFolder}/.calm,target=/root/.calm,type=bind,consistency=cached,readonly"
+		"source=${localWorkspaceFolder}/.calm,target=/root/.calm,type=bind,consistency=delegated"
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
