@@ -22,7 +22,7 @@ from calm.dsl.builtins import (
 from calm.dsl.builtins import read_ahv_spec
 
 CENTOS_USER = "centos"
-CENTOS_PASSWORD = "nutanix/4u"
+CENTOS_PASSWORD = read_local_file(os.path.join("secrets", "centos_os"))
 default_credential = basic_cred(CENTOS_USER, CENTOS_PASSWORD, name='CENTOS', default=True)
 
 

@@ -2,3 +2,5 @@
 .calm
 customers
 __pycache__
+secrets
+.local
