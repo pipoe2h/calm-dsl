@@ -1,5 +1,10 @@
 pipeline {
-  agent any
+  agent {
+    docker {
+      image 'ntnx/calm-dsl'
+    }
+
+  }
   stages {
     stage('Print Message') {
       steps {
