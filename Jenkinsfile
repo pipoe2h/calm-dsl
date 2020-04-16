@@ -27,7 +27,7 @@ pipeline {
 
     stage('Test') {
       steps {
-        sh 'calm init dsl -i ${env.PC_IP} -u ${env.PC_USER} -p ${env.PC_PASSWORD}'
+        sh "calm init dsl -i ${params.PC_IP} -u ${params.PC_USER} -p ${params.PC_PASSWORD}"
       }
     }
 
