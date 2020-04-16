@@ -21,8 +21,8 @@ pipeline {
 
     stage('Test') {
       parameters {
-        string(name: 'PC_IP', defaultValue: '192.168.2.50', description: 'Prism Central IP address'),
-        string(name: 'PC_USER', defaultValue: 'admin', description: 'Prism Central username'),
+        string(name: 'PC_IP', defaultValue: '192.168.2.50', description: 'Prism Central IP address')
+        string(name: 'PC_USER', defaultValue: 'admin', description: 'Prism Central username')
         password(name: 'PC_PASSWORD', defaultValue: 'nutanix/4u', description: 'Enter a password')
       }
       steps {
