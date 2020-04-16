@@ -6,11 +6,12 @@ pipeline {
       yamlFile 'build-pod.yaml'
       defaultContainer 'calm-dsl'
     }
+
   }
   stages {
     stage('Test') {
       environment {
-        CALM_CRED = credentials("Jenkins Calm Service Account")
+        CALM_CRED = credentials('Jenkins Calm Service Account')
         CALM_USER = "${env.CALM_CRED_USR}"
         CALM_PASSWORD = "${env.CALM_CRED_PSW}"
       }
