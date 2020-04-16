@@ -20,18 +20,13 @@ pipeline {
     }
 
     stage('Test') {
-      input {
-        message ''
-        parameters {
-          string(name: 'PC_IP', defaultValue: '192.168.2.50', description: 'Prism Central IP address')
-        }
+      parameters {
+        string(name: 'PC_IP', defaultValue: '192.168.2.50', description: 'Prism Central IP address'),
+        string(name: 'PC_USER', defaultValue: 'admin', description: 'Prism Central username'),
+        password(name: 'PC_PASSWORD', defaultValue: 'nutanix/4u', description: 'Enter a password')
       }
       steps {
-        sh '''
-          ls -la
-          echo ${env.PC_IP}
-          calm init dsl -i ${env.PC_IP}
-        '''
+        sh 'calm init dsl -i ${params.PC_IP} -u ${params.PC_USER} -p ${params.PC_PASSWORD}'
       }
     }
 
