@@ -6,15 +6,8 @@ pipeline {
       yamlFile 'build-pod.yaml'
       defaultContainer 'calm-dsl'
     }
-
   }
   stages {
-    stage('Print Message') {
-      steps {
-        echo 'Hello world'
-      }
-    }
-
     stage('Test') {
       environment {
         CALM_CRED = credentials("Jenkins Calm Service Account")
@@ -30,8 +23,6 @@ pipeline {
   parameters {
     string(name: 'PC_IP', defaultValue: '192.168.2.50', description: 'Prism Central IP address')
     string(name: 'PC_PORT', defaultValue: '9440', description: 'Prism Central port')
-    // string(name: 'PC_USER', defaultValue: 'admin', description: 'Prism Central username')
-    // password(name: 'PC_PASSWORD', defaultValue: 'nutanix/4u', description: 'Enter a password')
     string(name: 'CALM_PROJECT', defaultValue: 'default', description: 'Calm project')
   }
 }
