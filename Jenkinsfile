@@ -6,7 +6,6 @@ pipeline {
       yamlFile 'build-pod.yaml'
       defaultContainer 'calm-dsl'
     }
-
   }
   stages {
     stage('Test') {
