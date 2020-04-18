@@ -1,4 +1,4 @@
-name: jg-vdi_@@{calm_application_name}@@-@@{calm_array_index}@@
+name: jg-vdi_@@{calm_application_name}@@
 resources:
   boot_config:
     boot_device:
