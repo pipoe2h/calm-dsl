@@ -8,8 +8,8 @@ resources:
   disk_list:
   - data_source_reference:
       kind: image
-      name: WinSvr_2016
-      uuid: bd9fd2af-b9da-45a2-89bf-260f0021a575
+      name: RK_Windows10_1903.iso
+      uuid: 15a133d8-c78b-4dd5-a4ef-47b2f1c255fb
     device_properties:
       device_type: CDROM
       disk_address:
