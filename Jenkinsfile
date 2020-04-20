@@ -10,6 +10,7 @@ pipeline {
   // }
   stages {
     stage('Discovering blueprint...') {
+      agent any
       steps {
         git 'show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2'
       }
