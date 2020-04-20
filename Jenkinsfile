@@ -33,7 +33,6 @@ pipeline {
         CALM_CRED = credentials('Jenkins Calm Service Account')
         CALM_USER = "${env.CALM_CRED_USR}"
         CALM_PASSWORD = "${env.CALM_CRED_PSW}"
-        // CALM_BPPATH = "${env.BPPATH}"
       }
       agent {
         kubernetes {
