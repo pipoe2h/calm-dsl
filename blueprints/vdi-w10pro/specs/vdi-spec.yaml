@@ -35,7 +35,7 @@ resources:
   guest_customization:
     sysprep:
       install_type: FRESH
-  memory_size_mib: 8192
+  memory_size_mib: 6144
   nic_list:
   - network_function_nic_type: INGRESS
     nic_type: NORMAL_NIC
@@ -43,5 +43,5 @@ resources:
       kind: subnet
       name: dnd-jose.gomez
       uuid: e28bce98-3eef-4be7-8df9-bf9726dccba2
-  num_sockets: 2
+  num_sockets: 1
   num_vcpus_per_socket: 2
