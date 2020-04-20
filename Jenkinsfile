@@ -22,7 +22,7 @@ pipeline {
         script {
         //   // def ver_script = '$/git show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2/$'
         //   // echo "${ver_script}"
-          BPPATH = sh(script: '/bin/bash -c "git show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2"', returnStdout: true)
+          BPPATH = sh(script: '/bin/bash -c "git show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2"', returnStdout: true).replace("/n", "")
         //   // echo "${BPPATH}"
         //   // env.BPPATH = BPPATH
         }
