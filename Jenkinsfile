@@ -51,7 +51,7 @@ pipeline {
         sh "calm init dsl -i ${params.PC_IP} -P ${params.PC_PORT} -u $CALM_USER -p $CALM_PASSWORD -pj ${params.CALM_PROJECT}"
         sh "echo $CALM_BPPATH"
         sh "echo ${BPPATH}"
-        sh 'calm compile bp -f "$CALM_BPPATH\\/*.py"'
+        sh 'calm compile bp -f "$CALM_BPPATH\/*.py"'
       }
     }
   }
