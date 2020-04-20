@@ -1,4 +1,4 @@
-def BPPATH = sh(script: '/bin/bash -c "git show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2"', returnStdout: true)
+// def BPPATH = sh(script: '/bin/bash -c "git show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2"', returnStdout: true)
 
 pipeline {
   agent none
@@ -14,18 +14,20 @@ pipeline {
     BPPATH = ''
   }
   stages {
-    // stage('Discovering blueprint...') {
-    //   agent any
-    //   steps {
-    //     script {
-    //       // def ver_script = '$/git show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2/$'
-    //       // echo "${ver_script}"
-    //       BPPATH = sh(script: '/bin/bash -c "git show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2"', returnStdout: true)
-    //       echo "${BPPATH}"
-    //       env.BPPATH = BPPATH
-    //     }
-    //   }
-    // }
+    stage('Discovering blueprint...') {
+      agent any
+      steps {
+        // script {
+        //   // def ver_script = '$/git show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2/$'
+        //   // echo "${ver_script}"
+        //   // BPPATH = sh(script: '/bin/bash -c "git show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2"', returnStdout: true)
+        //   // echo "${BPPATH}"
+        //   // env.BPPATH = BPPATH
+        // }
+        sh 'BPPATH=$(git show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2)'
+        stash 'BPPATH'
+      }
+    }
     stage('Calm DSL...') {
       environment {
         CALM_CRED = credentials('Jenkins Calm Service Account')
@@ -42,10 +44,10 @@ pipeline {
         }
       }
       steps {
-        sh "echo $CALM_BPPATH"
-        sh "echo ${env.BPPATH}"
+        unstash 'BPPATH'
+        sh "source BPPATH; echo $BPPATH"
         sh "calm init dsl -i ${params.PC_IP} -P ${params.PC_PORT} -u $CALM_USER -p $CALM_PASSWORD -pj ${params.CALM_PROJECT}"
-        sh "calm compile bp -f $CALM_BPPATH/*.py"
+        sh "source BPPATH; calm compile bp -f $BPPATH/*.py"
       }
     }
   }
