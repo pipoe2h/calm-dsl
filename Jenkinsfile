@@ -1,5 +1,7 @@
 // def BPPATH = sh(script: '/bin/bash -c "git show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2"', returnStdout: true)
 
+BPPATH = ''
+
 pipeline {
   agent none
   // agent {
@@ -20,12 +22,12 @@ pipeline {
         // script {
         //   // def ver_script = '$/git show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2/$'
         //   // echo "${ver_script}"
-        //   // BPPATH = sh(script: '/bin/bash -c "git show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2"', returnStdout: true)
+          BPPATH = sh(script: '/bin/bash -c "git show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2"', returnStdout: true)
         //   // echo "${BPPATH}"
         //   // env.BPPATH = BPPATH
         // }
-        sh 'echo "export BPPATH=\\$(git show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2)" > ver_script'
-        stash 'ver_script'
+        // sh 'echo "export BPPATH=\\$(git show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2)" > ver_script'
+        // stash 'ver_script'
       }
     }
     stage('Calm DSL...') {
@@ -43,10 +45,10 @@ pipeline {
         }
       }
       steps {
-        unstash 'ver_script'
-        sh "source ver_script; echo $BPPATH"
+        // unstash 'ver_script'
+        // sh "source ver_script; echo $BPPATH"
         sh "calm init dsl -i ${params.PC_IP} -P ${params.PC_PORT} -u $CALM_USER -p $CALM_PASSWORD -pj ${params.CALM_PROJECT}"
-        sh "source ver_script; calm compile bp -f $BPPATH/*.py"
+        sh "calm compile bp -f ${BPPATH}/*.py"
       }
     }
   }
