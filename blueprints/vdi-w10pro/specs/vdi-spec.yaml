@@ -43,5 +43,5 @@ resources:
       kind: subnet
       name: dnd-jose.gomez
       uuid: e28bce98-3eef-4be7-8df9-bf9726dccba2
-  num_sockets: 2
+  num_sockets: 1
   num_vcpus_per_socket: 2
