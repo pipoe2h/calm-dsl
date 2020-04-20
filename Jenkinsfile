@@ -24,7 +24,7 @@ pipeline {
         //   // echo "${BPPATH}"
         //   // env.BPPATH = BPPATH
         // }
-        sh 'echo "export BPPATH=\$(git show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2)" > ver_script'
+        sh 'echo "export BPPATH=\\$(git show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2)" > ver_script'
         stash 'ver_script'
       }
     }
