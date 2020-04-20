@@ -14,7 +14,7 @@
         <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" language="neutral" name="Microsoft-Windows-PnpCustomizationsWinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" versionScope="nonSxS">
             <DriverPaths>
                 <PathAndCredentials wcm:action="add" wcm:keyValue="1">
-                    <Path>E:\Windows Server 2016\amd64\</Path>
+                    <Path>E:\Windows 10\amd64\</Path>
                 </PathAndCredentials>
             </DriverPaths>
         </component>
@@ -43,7 +43,7 @@
                         </ModifyPartition>
                         <ModifyPartition wcm:action="add">
                             <Format>NTFS</Format>
-                            <Label>Windows 2016</Label>
+                            <Label>Windows 10</Label>
                             <Letter>C</Letter>
                             <Order>2</Order>
                             <PartitionID>2</PartitionID>
@@ -58,7 +58,7 @@
                     <InstallFrom>
                         <MetaData wcm:action="add">
                             <Key>/IMAGE/NAME</Key>
-                            <Value>Windows Server 2016 SERVERSTANDARD</Value>
+                            <Value>Windows 10 Pro</Value>
                         </MetaData>
                     </InstallFrom>
                     <InstallTo>
@@ -87,7 +87,7 @@
             <OEMInformation>
                 <HelpCustomized>false</HelpCustomized>
             </OEMInformation>
-            <ComputerName>win2016</ComputerName>
+            <ComputerName>win10</ComputerName>
             <TimeZone>UTC</TimeZone>
             <RegisteredOwner/>
         </component>
