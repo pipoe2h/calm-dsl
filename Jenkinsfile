@@ -20,7 +20,7 @@ pipeline {
     }
     stage('Compiling blueprint...') {
       steps {
-        sh "BPPATH=$(git show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2)"
+        sh "BPPATH=\$(git show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2)"
         sh "calm compile bp -f $BPPATH/*.py"
       }
     }
