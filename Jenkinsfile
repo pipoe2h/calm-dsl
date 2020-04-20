@@ -35,6 +35,9 @@ pipeline {
         CALM_CRED = credentials('Jenkins Calm Service Account')
         CALM_USER = "${env.CALM_CRED_USR}"
         CALM_PASSWORD = "${env.CALM_CRED_PSW}"
+        WINDOWS_LOCAL_ADMINISTRATOR_PASSWORD = credentials('Windows_Local_Administrator_Password')
+        DOMAIN_JOIN_USER_PASSWORD = credentials('Domain_Join_User_Password')
+        WINDOWS_LICENSE_KEY = credentials('Windows_License_Key')
       }
       agent {
         kubernetes {

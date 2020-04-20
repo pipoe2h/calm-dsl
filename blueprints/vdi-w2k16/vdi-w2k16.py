@@ -8,7 +8,7 @@ from calm.dsl.builtins import read_local_file, read_provider_spec, read_file
 
 # Windows Credentials
 WINDOWS_USER = "Administrator"
-WINDOWS_PASSWORD = read_local_file(
+WINDOWS_PASSWORD = os.getenv('WINDOWS_LOCAL_ADMINISTRATOR_PASSWORD') or read_local_file(
     os.path.join("secrets", "Windows_Local_Administrator_Password")
 )
 Windows_Local_Administrator = basic_cred(
@@ -17,13 +17,13 @@ Windows_Local_Administrator = basic_cred(
 
 # Domain Credentials
 DOMAIN_USER = "UKDEMO\\jose.gomez"
-DOMAIN_PASSWORD = read_local_file(os.path.join("secrets", "Domain_Join_User_Password"))
+DOMAIN_PASSWORD = os.getenv('DOMAIN_JOIN_USER_PASSWORD') or read_local_file(os.path.join("secrets", "Domain_Join_User_Password"))
 Domain_Join_User = basic_cred(
     DOMAIN_USER, DOMAIN_PASSWORD, name="Domain_Join_User", default=False,
 )
 
 # Windows License
-WINDOWS_KEY = read_local_file(os.path.join("secrets", "Windows_License_Key"))
+WINDOWS_KEY = os.getenv('WINDOWS_LICENSE_KEY') or read_local_file(os.path.join("secrets", "Windows_License_Key"))
 
 
 class VM(Service):
