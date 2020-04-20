@@ -40,7 +40,7 @@ pipeline {
       }
       steps {
         sh "calm init dsl -i ${params.PC_IP} -P ${params.PC_PORT} -u $CALM_USER -p $CALM_PASSWORD -pj ${params.CALM_PROJECT}"
-        sh "calm compile bp -f ${env.AGENT_INFO}/*.py"
+        sh "calm compile bp -f ${env.BPPATH}/*.py"
       }
     }
   }
