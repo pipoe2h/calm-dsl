@@ -37,8 +37,8 @@ pipeline {
     }
   }
   post { 
-    agent any
     always { 
+      agent any
       deleteDir()
     } 
   }
