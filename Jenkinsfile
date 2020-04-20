@@ -36,7 +36,12 @@ pipeline {
       }
     }
   }
-  post { always { deleteDir() } }
+  post { 
+    agent any
+    always { 
+      deleteDir()
+    } 
+  }
   parameters {
     string(name: 'PC_IP', defaultValue: '192.168.2.50', description: 'Prism Central IP address')
     string(name: 'PC_PORT', defaultValue: '9440', description: 'Prism Central port')
