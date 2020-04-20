@@ -5,7 +5,7 @@ pipeline {
   stages {
     stage('Discovering blueprint...') {
       agent {
-        label 'default'
+        label 'jenkins-jenkins-slave'
       }
       steps {
         script {
