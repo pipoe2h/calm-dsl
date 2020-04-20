@@ -1,33 +1,14 @@
-// def BPPATH = sh(script: '/bin/bash -c "git show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2"', returnStdout: true)
-
 BPPATH = ''
 
 pipeline {
   agent none
-  // agent {
-  //   kubernetes {
-  //     label 'dsl-app'
-  //     idleMinutes 5
-  //     yamlFile 'build-pod.yaml'
-  //     defaultContainer 'calm-dsl'
-  //   }
-  // }
-  // environment {
-  //   BPPATH = ''
-  // }
   stages {
     stage('Discovering blueprint...') {
       agent any
       steps {
         script {
-        //   // def ver_script = '$/git show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2/$'
-        //   // echo "${ver_script}"
           BPPATH = sh(script: '/bin/bash -c "git show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2"', returnStdout: true).trim()
-        //   // echo "${BPPATH}"
-        //   // env.BPPATH = BPPATH
         }
-        // sh 'echo "export BPPATH=\\$(git show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2)" > ver_script'
-        // stash 'ver_script'
       }
     }
     stage('Calm DSL...') {
@@ -48,12 +29,10 @@ pipeline {
         }
       }
       steps {
-        // unstash 'ver_script'
-        // sh "source ver_script; echo $BPPATH"
         sh "calm init dsl -i ${params.PC_IP} -P ${params.PC_PORT} -u $CALM_USER -p $CALM_PASSWORD -pj ${params.CALM_PROJECT}"
-        // sh "calm compile bp -f ${BPPATH}/*.py"
         sh "calm create bp -f ${BPPATH}/*.py --name jg-dsl-${BRANCH_NAME}-${BUILD_NUMBER}"
-        sh "calm launch bp jg-dsl-${BRANCH_NAME}-${BUILD_NUMBER}"
+        sh "calm launch bp -a jg-dsl-${BRANCH_NAME}-${BUILD_NUMBER} jg-dsl-${BRANCH_NAME}-${BUILD_NUMBER}"
+        sh "calm watch app jg-dsl-${BRANCH_NAME}-${BUILD_NUMBER}"
       }
     }
   }
