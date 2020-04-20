@@ -8,11 +8,19 @@ pipeline {
   //     defaultContainer 'calm-dsl'
   //   }
   // }
+  environment {
+    BPPATH = ''
+  }
   stages {
     stage('Discovering blueprint...') {
       agent any
       steps {
-        git 'show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2'
+        script {
+          def bpPath = sh script:"git show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2", returnStdout: true
+          println "Agent info within script: ${bpPath}"
+          BPPATH = bpPath.replace("/n", "")
+          env.BPPATH = BPPATH
+        }
       }
     }
     stage('Calm DSL...') {
@@ -31,7 +39,7 @@ pipeline {
       }
       steps {
         sh "calm init dsl -i ${params.PC_IP} -P ${params.PC_PORT} -u $CALM_USER -p $CALM_PASSWORD -pj ${params.CALM_PROJECT}"
-        sh "calm compile bp -f $BPPATH/*.py"
+        sh "calm compile bp -f ${env.AGENT_INFO}/*.py"
       }
     }
   }
