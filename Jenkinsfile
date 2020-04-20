@@ -1,26 +1,35 @@
 pipeline {
-  agent {
-    kubernetes {
-      label 'dsl-app'
-      idleMinutes 5
-      yamlFile 'build-pod.yaml'
-      defaultContainer 'calm-dsl'
-    }
-  }
+  agent none
+  // agent {
+  //   kubernetes {
+  //     label 'dsl-app'
+  //     idleMinutes 5
+  //     yamlFile 'build-pod.yaml'
+  //     defaultContainer 'calm-dsl'
+  //   }
+  // }
   stages {
-    stage('Initialise Calm DSL...') {
+    stage('Discovering blueprint...') {
+      steps {
+        git 'show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2'
+      }
+    }
+    stage('Calm DSL...') {
       environment {
         CALM_CRED = credentials('Jenkins Calm Service Account')
         CALM_USER = "${env.CALM_CRED_USR}"
         CALM_PASSWORD = "${env.CALM_CRED_PSW}"
       }
+      agent {
+        kubernetes {
+          label 'dsl-app'
+          idleMinutes 5
+          yamlFile 'build-pod.yaml'
+          defaultContainer 'calm-dsl'
+        }
+      }
       steps {
         sh "calm init dsl -i ${params.PC_IP} -P ${params.PC_PORT} -u $CALM_USER -p $CALM_PASSWORD -pj ${params.CALM_PROJECT}"
-      }
-    }
-    stage('Compiling blueprint...') {
-      steps {
-        sh "BPPATH=\$(git show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2)"
         sh "calm compile bp -f $BPPATH/*.py"
       }
     }
