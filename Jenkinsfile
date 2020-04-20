@@ -35,6 +35,7 @@ pipeline {
         CALM_CRED = credentials('Jenkins Calm Service Account')
         CALM_USER = "${env.CALM_CRED_USR}"
         CALM_PASSWORD = "${env.CALM_CRED_PSW}"
+        CALM_BPPATH = "${BPPATH}"
       }
       agent {
         kubernetes {
@@ -48,7 +49,7 @@ pipeline {
         // unstash 'ver_script'
         // sh "source ver_script; echo $BPPATH"
         sh "calm init dsl -i ${params.PC_IP} -P ${params.PC_PORT} -u $CALM_USER -p $CALM_PASSWORD -pj ${params.CALM_PROJECT}"
-        sh "calm compile bp -f ${BPPATH}\\/*.py"
+        sh "calm compile bp -f $CALM_BPPATH/*.py"
       }
     }
   }
