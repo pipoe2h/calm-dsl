@@ -4,11 +4,14 @@ pipeline {
   agent none
   stages {
     stage('Discovering blueprint...') {
-      agent any
+      agent {
+        label 'default'
+      }
       steps {
         script {
           BPPATH = sh(script: '/bin/bash -c "git show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2"', returnStdout: true).trim()
         }
+        sh 'py3clean .'
       }
     }
     stage('Calm DSL...') {
@@ -38,7 +41,9 @@ pipeline {
   }
   post { 
     always { 
-      agent any
+      agent {
+        label 'default'
+      }
       deleteDir()
     } 
   }
