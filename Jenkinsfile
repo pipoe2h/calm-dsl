@@ -16,7 +16,8 @@ pipeline {
       agent any
       steps {
         script {
-          def bpPath = $/eval "git show --name-only HEAD^..HEAD | tail -1 | cut -d'\/' -f1-2"/$, returnStdout: true
+          def bpPath = $/eval "git show --name-only HEAD^..HEAD | tail -1 | cut -d'\/' -f1-2"/$
+          echo "${bpPath}"
           println "Agent info within script: ${bpPath}"
           BPPATH = bpPath.replace("/n", "")
           env.BPPATH = BPPATH
