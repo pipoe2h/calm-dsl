@@ -51,7 +51,9 @@ pipeline {
         // unstash 'ver_script'
         // sh "source ver_script; echo $BPPATH"
         sh "calm init dsl -i ${params.PC_IP} -P ${params.PC_PORT} -u $CALM_USER -p $CALM_PASSWORD -pj ${params.CALM_PROJECT}"
-        sh "calm compile bp -f ${BPPATH}/*.py"
+        // sh "calm compile bp -f ${BPPATH}/*.py"
+        sh "calm create bp -f ${BPPATH}/*.py --name jg-dsl-${BRANCH_NAME}-${BUILD_NUMBER}"
+        sh "calm launch bp jg-dsl-${BRANCH_NAME}-${BUILD_NUMBER}"
       }
     }
   }

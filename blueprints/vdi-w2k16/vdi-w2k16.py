@@ -29,7 +29,7 @@ WINDOWS_KEY = os.getenv('WINDOWS_LICENSE_KEY') or read_local_file(os.path.join("
 class VM(Service):
     @action
     def __create__():
-        """Windows IaaS"""
+        """Windows IaaS """
 
 
 class VM_AHV_Small_Package(Package):
