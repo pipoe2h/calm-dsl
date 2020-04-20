@@ -24,7 +24,7 @@ pipeline {
         //   // echo "${BPPATH}"
         //   // env.BPPATH = BPPATH
         // }
-        sh 'BPPATH=$(git show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2)'
+        sh '/bin/bash -c "git show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2"'
         stash 'BPPATH'
       }
     }
