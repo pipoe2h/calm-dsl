@@ -19,13 +19,13 @@ pipeline {
     stage('Discovering blueprint...') {
       agent any
       steps {
-        // script {
+        script {
         //   // def ver_script = '$/git show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2/$'
         //   // echo "${ver_script}"
           BPPATH = sh(script: '/bin/bash -c "git show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2"', returnStdout: true)
         //   // echo "${BPPATH}"
         //   // env.BPPATH = BPPATH
-        // }
+        }
         // sh 'echo "export BPPATH=\\$(git show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2)" > ver_script'
         // stash 'ver_script'
       }
