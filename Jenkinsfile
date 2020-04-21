@@ -8,10 +8,10 @@ pipeline {
         label 'jenkins-jenkins-slave'
       }
       steps {
+        dir("${BRANCH_NAME}-${BUILD_NUMBER}")
         script {
           BPPATH = sh(script: '/bin/bash -c "git show --name-only HEAD^..HEAD | tail -1 | cut -d/ -f1-2"', returnStdout: true).trim()
         }
-        sh 'py3clean .'
       }
     }
     stage('Calm DSL...') {
@@ -32,6 +32,7 @@ pipeline {
         }
       }
       steps {
+        dir("${BRANCH_NAME}-${BUILD_NUMBER}")
         sh "calm init dsl -i ${params.PC_IP} -P ${params.PC_PORT} -u $CALM_USER -p $CALM_PASSWORD -pj ${params.CALM_PROJECT}"
         sh "calm create bp -f ${BPPATH}/*.py --name jg-dsl-${BRANCH_NAME}-${BUILD_NUMBER}"
         sh "calm launch bp -a jg-dsl-${BRANCH_NAME}-${BUILD_NUMBER} jg-dsl-${BRANCH_NAME}-${BUILD_NUMBER}"
