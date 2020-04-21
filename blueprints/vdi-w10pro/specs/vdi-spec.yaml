@@ -35,7 +35,7 @@ resources:
   guest_customization:
     sysprep:
       install_type: FRESH
-  memory_size_mib: 6144
+  memory_size_mib: 8192
   nic_list:
   - network_function_nic_type: INGRESS
     nic_type: NORMAL_NIC
