@@ -7,6 +7,14 @@ pipeline {
     timeout(time: 24, unit: 'HOURS')
   }
   stages {
+    stage('Cleanup') {
+      agent {
+        label 'jenkins-jenkins-slave'
+      }
+      steps {
+        sh "git clean -x -f"
+      }
+    }
     stage('Discovering blueprint...') {
       agent {
         node {
