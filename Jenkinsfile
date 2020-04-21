@@ -38,11 +38,11 @@ pipeline {
         }
       }
       steps {
-        sh "sudo chown -R $USER:jenkins `pwd`"
         sh "calm init dsl -i ${params.PC_IP} -P ${params.PC_PORT} -u $CALM_USER -p $CALM_PASSWORD -pj ${params.CALM_PROJECT}"
         sh "calm create bp -f ${BPPATH}/*.py --name jg-dsl-${BRANCH_NAME}-${BUILD_NUMBER}"
         sh "calm launch bp -a jg-dsl-${BRANCH_NAME}-${BUILD_NUMBER} jg-dsl-${BRANCH_NAME}-${BUILD_NUMBER}"
         // sh "calm watch app jg-dsl-${BRANCH_NAME}-${BUILD_NUMBER}"
+        cleanWs()
       }
     }
   }
