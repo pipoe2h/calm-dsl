@@ -14,6 +14,7 @@ WORKDIR /root
 RUN mkdir -p `python3 -m site --user-site`
 ENV PATH=/root/.local/bin:$PATH
 
+# Install Calm-DSL and configure bash completion
 RUN wget -q -O /tmp/calm-dsl.zip $CALM_DSL_TARBALL \
     && unzip /tmp/calm-dsl.zip -d /tmp \
     && rm /tmp/calm-dsl.zip \
@@ -22,6 +23,18 @@ RUN wget -q -O /tmp/calm-dsl.zip $CALM_DSL_TARBALL \
     && make dist \
     && pip3 install --no-cache-dir dist/calm.dsl*.whl --user \
     && cd ~ \
-    && rm -fR /tmp/calm-dsl-master
+    && rm -fR /tmp/calm-dsl-master \
+    #
+    # Install bash completion
+    && apt-get update \
+    && apt-get install -y --no-install-recommends bash-completion 2>&1 \
+    #
+    # Enable Calm-DSL completion
+    && echo 'source <(calm completion show)' >>~/.bashrc \
+    #
+    # Clean up
+    && apt-get autoremove -y \
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/*
 
 CMD ["bash"]
