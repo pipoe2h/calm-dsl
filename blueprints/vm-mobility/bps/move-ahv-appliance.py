@@ -10,6 +10,7 @@ from calm.dsl.builtins import read_ahv_spec, read_local_file
 from calm.dsl.builtins import vm_disk_package, AhvVmNic, AhvVm, AhvVmDisk
 
 import json
+import os
 
 
 Cred_Move = basic_cred("username", "password", name="Cred_Move", default=True)
@@ -23,6 +24,8 @@ Move_Disk = vm_disk_package(
         }
     },
 )
+
+MOVE_QCOW2_URL = os.getenv("MOVE_QCOW2_URL")
 
 
 class MoveVM(Service):
@@ -68,7 +71,7 @@ class AHV(Profile):
 
     deployments = [MoveDeployment]
     
-    MOVE_IMAGE_URL = CalmVariable.Simple.string("", is_mandatory=True, runtime=True)
+    MOVE_IMAGE_URL = CalmVariable.Simple.string(MOVE_QCOW2_URL, is_mandatory=True, runtime=True)
 
 
 class MoveDslBlueprint(Blueprint):
