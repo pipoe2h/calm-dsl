@@ -19,11 +19,11 @@ resources:
     #cloud-config
     hostname: @@{name}@@
     users:
-      - name: centos
+      - name: @@{Cred_OS.username}@@
         sudo: ['ALL=(ALL) NOPASSWD:ALL']
     chpasswd:
       list: |
-        centos:@@{PASSWORD}@@
+        @@{Cred_OS.username}@@:@@{Cred_OS.secret}@@
       expire: False
     ssh_pwauth: True
 type: PROVISION_AWS_VM
