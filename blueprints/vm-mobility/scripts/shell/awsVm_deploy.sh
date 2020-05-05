@@ -1,12 +1,20 @@
 BP_DIR_PATH="calm-dsl/blueprints/vm-mobility"
 OS_USERNAME="@@{Cred_OS.username}@@"
 OS_PASSWORD=@@{Cred_OS.secret}@@
+AWS_AMI_ID="@@{AWS_AMI_ID}@@"
+AWS_REGION="@@{AWS_REGION}@@"
+AWS_VPC_ID="@@{AWS_VPC_ID}@@"
+AWS_SG_ID="@@{AWS_SG_ID}@@"
 
 git --work-tree $HOME/calm-dsl/ --git-dir calm-dsl/.git pull
 
 docker run --rm --name calm-dsl \
     -e CALMDSL_OS_USERNAME=$OS_USERNAME \
     -e CALMDSL_OS_PASSWORD=$OS_PASSWORD \
+    -e CALMDSL_AWS_AMI_ID=$AWS_AMI_ID \
+    -e CALMDSL_AWS_REGION=$AWS_REGION \
+    -e CALMDSL_AWS_VPC_ID=$AWS_VPC_ID \
+    -e CALMDSL_AWS_SG_ID = $AWS_SG_ID \
     -v $HOME/config/.calm:/root/.calm \
     -v $HOME/$BP_DIR_PATH/:/root/vm-mobility/ ntnx/calm-dsl \
     /bin/bash -c " \

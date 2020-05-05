@@ -26,7 +26,7 @@ vpcs = ec2_client.describe_vpcs(
 )
 
 AWS_VCP = vpcs['Vpcs'][0]['VpcId']
-print("AWS_VCP={}".format(AWS_VCP))
+print("AWS_VCP_ID={}".format(AWS_VCP))
 
 security_groups = ec2_client.describe_security_groups()
 

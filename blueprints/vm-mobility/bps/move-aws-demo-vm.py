@@ -21,6 +21,10 @@ Cred_OS = basic_cred(
     type="PASSWORD"
 )
 
+AWS_AMI_ID = os.getenv("CALMDSL_AWS_AMI_ID")
+AWS_REGION = os.getenv("CALMDSL_AWS_REGION")
+AWS_VPC_ID = os.getenv("CALMDSL_AWS_VPC_ID")
+AWS_SG_ID = os.getenv("CALMDSL_AWS_SG_ID")
 
 class AwsVmService(Service):
     """AWS VM"""
@@ -35,8 +39,12 @@ class AwsVmSubstrate(Substrate):
     """AWS VM config given by reading a spec file"""
 
     provider_spec = read_provider_spec("specs/aws_spec_centos.yaml")
-    # provider_spec.spec['name'] = ''
-    # provider_spec.spec['resources'] = ''
+    provider_spec.spec['resources']['image_id'] = AWS_AMI_ID
+    provider_spec.spec['resources']['region'] = AWS_REGION
+    provider_spec.spec['resources']['vpc_id'] = AWS_VPC_ID
+    provider_spec.spec['resources']['security_group_list'] = [
+        {"security_group_id": AWS_SG_ID}
+    ]
     provider_type = "AWS_VM"
     os_type = "Linux"
     readiness_probe = {

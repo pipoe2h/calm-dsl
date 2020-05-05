@@ -85,7 +85,7 @@ class ControlVM(Service):
 
     AWS_AMI_ID = Variable.Simple.string('',name='AWS_AMI_ID')
     AWS_SG_ID = Variable.Simple.string('',name='AWS_SG_ID')
-    AWS_VPC = Variable.Simple.string('',name='AWS_VPC')
+    AWS_VPC_ID = Variable.Simple.string('',name='AWS_VPC_ID')
 
 class ControlVM_Package(Package):
     services = [ref(ControlVM)]

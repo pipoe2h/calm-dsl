@@ -15,7 +15,17 @@ setup_default_session(
 )
 
 ec2_client = client('ec2')
-images = ec2_client.describe_images(Owners=['self'])
+images = ec2_client.describe_images(
+    Owners=['self'],
+    Filters=[
+        {
+            "Name": "name",
+            "Values": [
+                'Nutanix Move CentOS Demo'
+            ]
+        }        
+    ]
+)
 
 if "Nutanix Move CentOS Demo" not in json.dumps(images):
 
@@ -35,3 +45,5 @@ if "Nutanix Move CentOS Demo" not in json.dumps(images):
         sleep(10)
 
     print("AWS_AMI_ID={}".format(ami_id))
+
+print("AWS_AMI_ID={}".format(images['Images'][0]['ImageId']))
