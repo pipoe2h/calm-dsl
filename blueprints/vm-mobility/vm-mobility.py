@@ -83,6 +83,9 @@ class ControlVM(Service):
             name="MoveDeployTask"
         )
 
+    AWS_AMI_ID = Variable.Simple.string('',name='AWS_AMI_ID')
+    AWS_SG_ID = Variable.Simple.string('',name='AWS_SG_ID')
+    AWS_VPC = Variable.Simple.string('',name='AWS_VPC')
 
 class ControlVM_Package(Package):
     services = [ref(ControlVM)]
@@ -154,7 +157,14 @@ class Default(Profile):
     AWS_REGION = Variable.Simple.string(
         "eu-west-2",
         is_mandatory=True,
-        runtime=True
+        runtime=True,
+        name="AWS_REGION"
+    )
+
+    AWS_SOURCE_AMI = Variable.Simple.string(
+        "ami-02746e65e84b05139",
+        is_hidden=True,
+        name="AWS_SOURCE_AMI"
     )
 
     PC_IP = Variable.Simple.string(
@@ -191,6 +201,20 @@ class Default(Profile):
 
     @action
     def Second_Deploy_AWS_Demo_VM():
+
+        CalmTask.SetVariable.escript(
+            filename="scripts/aws/copy_ami.py",
+            name="CopyAmiTask",
+            variables=['AWS_AMI_ID'],
+            target=ref(ControlVM)
+        )
+
+        CalmTask.SetVariable.escript(
+            filename="scripts/aws/create_sg.py",
+            name="CreateSgTask",
+            variables=['AWS_SG_ID'],
+            target=ref(ControlVM)
+        )        
 
         CalmTask.Exec.ssh(
             filename="scripts/shell/awsVm_deploy.sh",
