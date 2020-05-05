@@ -26,5 +26,6 @@ resources:
         @@{Cred_OS.username}@@:@@{Cred_OS.secret}@@
       expire: False
     ssh_pwauth: True
+  subnet_id: subnet-562eab2c
   vpc_id: vpc-29354341
 type: PROVISION_AWS_VM
