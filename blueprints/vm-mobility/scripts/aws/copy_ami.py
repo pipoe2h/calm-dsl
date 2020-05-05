@@ -5,8 +5,6 @@ AWS_SOURCE_AMI = '@@{AWS_SOURCE_AMI}@@'
 
 from boto3 import client
 from boto3 import setup_default_session
-import json
-from time import sleep
 
 setup_default_session(
     aws_access_key_id=AWS_ACCESS_KEY,

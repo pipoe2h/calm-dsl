@@ -4,7 +4,6 @@ AWS_REGION = '@@{AWS_REGION}@@'
 
 from boto3 import client
 from boto3 import setup_default_session
-import json
 
 setup_default_session(
     aws_access_key_id=AWS_ACCESS_KEY,
