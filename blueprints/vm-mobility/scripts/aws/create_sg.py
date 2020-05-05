@@ -13,6 +13,7 @@ setup_default_session(
 
 ec2_client = client('ec2')
 
+# Get VPC ID
 vpcs = ec2_client.describe_vpcs(
     Filters=[
         {
@@ -24,17 +25,17 @@ vpcs = ec2_client.describe_vpcs(
     ]
 )
 
-AWS_VCP = vpcs['Vpcs'][0]['VpcId']
-print("AWS_VCP_ID={}".format(AWS_VCP))
+AWS_VPC = vpcs['Vpcs'][0]['VpcId']
 
-security_groups = ec2_client.describe_security_groups()
+# Configure Security Group
+security_groups = ec2_client.describe_security_groups(GroupNames=['NTNX_MOVE_DEMO_CENTOS'])
 
 if "NTNX_MOVE_DEMO_CENTOS" not in json.dumps(security_groups):
 
     response = ec2_client.create_security_group(
         Description='Nutanix Move Demo - Allow HTTP and SSH',
         GroupName='NTNX_MOVE_DEMO_CENTOS',
-        VpcId=AWS_VCP
+        VpcId=AWS_VPC
     )
 
     sg_id = response['GroupId']
@@ -68,3 +69,7 @@ if "NTNX_MOVE_DEMO_CENTOS" not in json.dumps(security_groups):
     )
 
     print("AWS_SG_ID={}".format(sg_id))
+
+# Set Calm variables
+print("AWS_SG_ID={}".format(security_groups['SecurityGroups'][0]['GroupId']))
+print("AWS_VPC_ID={}".format(AWS_VPC))
