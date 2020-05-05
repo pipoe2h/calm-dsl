@@ -1,12 +1,10 @@
 import os
 
-from calm.dsl.builtins import ref, basic_cred
+from calm.dsl.builtins import action, ref, basic_cred, CalmTask
 from calm.dsl.builtins import read_local_file, read_provider_spec
 
 from calm.dsl.builtins import Service, Package, Substrate
 from calm.dsl.builtins import Deployment, Profile, Blueprint
-
-from calm.dsl.builtins import CalmTask
 
 # Credentials definition
 OS_USERNAME = os.getenv("CALMDSL_OS_USERNAME") or read_local_file(
