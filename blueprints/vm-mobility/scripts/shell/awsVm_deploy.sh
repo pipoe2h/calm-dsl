@@ -2,6 +2,8 @@ BP_DIR_PATH="calm-dsl/blueprints/vm-mobility"
 OS_USERNAME="@@{Cred_OS.username}@@"
 OS_PASSWORD=@@{Cred_OS.secret}@@
 
+git --work-tree $HOME/calm-dsl/ --git-dir calm-dsl/.git pull
+
 docker run --rm --name calm-dsl \
     -e CALMDSL_OS_USERNAME=$OS_USERNAME \
     -e CALMDSL_OS_PASSWORD=$OS_PASSWORD \
