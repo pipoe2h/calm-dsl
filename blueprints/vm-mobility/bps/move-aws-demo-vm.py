@@ -6,6 +6,8 @@ from calm.dsl.builtins import read_local_file, read_provider_spec
 from calm.dsl.builtins import Service, Package, Substrate
 from calm.dsl.builtins import Deployment, Profile, Blueprint
 
+from calm.dsl.builtins import CalmTask
+
 # Credentials definition
 OS_USERNAME = os.getenv("CALMDSL_OS_USERNAME") or read_local_file(
     os.path.join("secrets", "os_username")
@@ -33,6 +35,13 @@ class AwsVmService(Service):
 class AwsVmPackage(Package):
 
     services = [ref(AwsVmService)]
+
+    @action
+    def __install__():
+        CalmTask.Exec.ssh(
+            filename="scripts/centos_install_httpd.sh",
+            name="PackageInstallTask"
+        )
 
 
 class AwsVmSubstrate(Substrate):
