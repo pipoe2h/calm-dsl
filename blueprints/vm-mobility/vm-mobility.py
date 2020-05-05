@@ -15,72 +15,47 @@ ENV = read_env()
 CENTOS_IMAGE_SOURCE = ENV.get("CENTOS_IMAGE_SOURCE")
 
 # Credentials definition
-# OS_USERNAME = os.getenv("CALMDSL_OS_USERNAME") or read_local_file(
-#     os.path.join("secrets", "os_username")
-# )
-# OS_PASSWORD = os.getenv("CALMDSL_OS_PASSWORD") or read_local_file(
-#     os.path.join("secrets", "os_password")
-# )
-# Cred_OS = basic_cred(
-#     username=OS_USERNAME,
-#     password=OS_PASSWORD,
-#     name="Cred_OS",
-#     default=True,
-#     type="PASSWORD"
-# )
-
+OS_USERNAME = os.getenv("CALMDSL_OS_USERNAME") or read_local_file(
+    os.path.join("secrets", "os_username")
+)
+OS_PASSWORD = os.getenv("CALMDSL_OS_PASSWORD") or read_local_file(
+    os.path.join("secrets", "os_password")
+)
 Cred_OS = basic_cred(
-    username="centos",
-    password="password",
+    username=OS_USERNAME,
+    password=OS_PASSWORD,
     name="Cred_OS",
     default=True,
     type="PASSWORD"
 )
 
-# PC_USERNAME = os.getenv("CALMDSL_PC_USERNAME") or read_local_file(
-#     os.path.join("secrets", "pc_username")
-# )
-# PC_PASSWORD = os.getenv("CALMDSL_PC_PASSWORD") or read_local_file(
-#     os.path.join("secrets", "pc_password")
-# )
-# Cred_PC = basic_cred(
-#     username=PC_USERNAME,
-#     password=PC_PASSWORD,
-#     name="Cred_PC",
-#     default=False,
-#     type="PASSWORD"
-# )
-
+PC_USERNAME = os.getenv("CALMDSL_PC_USERNAME") or read_local_file(
+    os.path.join("secrets", "pc_username")
+)
+PC_PASSWORD = os.getenv("CALMDSL_PC_PASSWORD") or read_local_file(
+    os.path.join("secrets", "pc_password")
+)
 Cred_PC = basic_cred(
-    username="admin",
-    password="password",
+    username=PC_USERNAME,
+    password=PC_PASSWORD,
     name="Cred_PC",
     default=False,
     type="PASSWORD"
 )
 
-# AWS_ACCESS_KEY = os.getenv("CALMDSL_AWS_ACCESS_KEY") or read_local_file(
-#     os.path.join("secrets", "aws_access_key")
-# )
-# AWS_SECRET_KEY = os.getenv("CALMDSL_AWS_SECRET_KEY") or read_local_file(
-#     os.path.join("secrets", "aws_secret_key")
-# )
-# Cred_AWS = basic_cred(
-#     username=AWS_ACCESS_KEY,
-#     password=AWS_SECRET_KEY,
-#     name="Cred_AWS",
-#     default=False,
-#     type="PASSWORD"
-# )
-
+AWS_ACCESS_KEY = os.getenv("CALMDSL_AWS_ACCESS_KEY") or read_local_file(
+    os.path.join("secrets", "aws_access_key")
+)
+AWS_SECRET_KEY = os.getenv("CALMDSL_AWS_SECRET_KEY") or read_local_file(
+    os.path.join("secrets", "aws_secret_key")
+)
 Cred_AWS = basic_cred(
-    username="AWS_ACCESS_KEY",
-    password="password",
+    username=AWS_ACCESS_KEY,
+    password=AWS_SECRET_KEY,
     name="Cred_AWS",
     default=False,
     type="PASSWORD"
 )
-
 
 # Downloadable images for AHV and VMware
 # AHV_CENTOS_76 = vm_disk_package(
@@ -139,11 +114,6 @@ class ControlVM_Package(Package):
             name="CalmDslInstallTask"
         )
 
-        CalmTask.Exec.ssh(
-            filename="scripts/shell/move_deploy.sh",
-            name="MoveDeployTask"
-        )
-
 
 class ControlVM_Substrate(Substrate):
     os_type = "Linux"
@@ -196,6 +166,7 @@ class Default(Profile):
     PROJECT_NETWORK = Variable.WithOptions.FromTask(
         CalmTask.HTTP.post(
             "https://localhost:9440/api/nutanix/v3/projects/list",
+            credential=Cred_PC,
             body=json.dumps({"filter": "name==@@{calm_project_name}@@"}),
             # Headers in HTTP variables are bugged:
             # https://jira.nutanix.com/browse/CALM-13724
@@ -209,6 +180,27 @@ class Default(Profile):
         label="Select network"
     )
 
+    @action
+    def First_Deploy_Move():
+
+        CalmTask.Exec.ssh(
+            filename="scripts/shell/move_deploy.sh",
+            name="MoveDeployTask",
+            target=ref(ControlVM)
+        )
+
+    @action
+    def Second_Deploy_AWS_Demo_VM():
+
+        CalmTask.Exec.ssh(
+            filename="scripts/shell/awsVm_deploy.sh",
+            name="AwsVmDeployTask",
+            target=ref(ControlVM)
+        )
+    
+    @action
+    def Third_Migrate_VM():
+        """ccc"""
 
 class Workload_Mobility_Setup(Blueprint):
 
