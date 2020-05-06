@@ -19,7 +19,8 @@ docker run --rm --name calm-dsl \
     -v $HOME/$BP_DIR_PATH/:/root/vm-mobility/ ntnx/calm-dsl \
     /bin/bash -c " \
     calm create bp -n @@{calm_application_name}@@-bp-move-awsVm \
-    -f vm-mobility/bps/move-aws-demo-vm.py --force; \
-    calm launch bp -i \
+    -f vm-mobility/bps/move-aws-demo-vm.py --force \
+    && calm launch bp -i \
     -a @@{calm_application_name}@@-app-move-awsVm \
-    @@{calm_application_name}@@-bp-move-awsVm"
+    @@{calm_application_name}@@-bp-move-awsVm \
+    && calm watch app @@{calm_application_name}@@-bp-move-awsVm"

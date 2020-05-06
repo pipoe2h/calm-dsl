@@ -3,17 +3,26 @@ Move Blueprint
 
 """
 
-from calm.dsl.builtins import ref, basic_cred
+from calm.dsl.builtins import action, ref, basic_cred, CalmTask
 from calm.dsl.builtins import Service, Package, Substrate
-from calm.dsl.builtins import Deployment, Profile, Blueprint, AhvVmResources, CalmVariable
+from calm.dsl.builtins import Deployment, Profile, Blueprint, CalmVariable
 from calm.dsl.builtins import read_ahv_spec, read_local_file
-from calm.dsl.builtins import vm_disk_package, AhvVmNic, AhvVm, AhvVmDisk
+from calm.dsl.builtins import vm_disk_package, AhvVmNic
 
 import json
 import os
 
 
-Cred_Move = basic_cred("username", "password", name="Cred_Move", default=True)
+MOVE_PASSWORD = os.getenv("CALMDSL_MOVE_PASSWORD") or read_local_file(
+    os.path.join("secrets", "move_password")
+)
+Cred_Move = basic_cred(
+    username="nutanix",
+    password=MOVE_PASSWORD,
+    name="Cred_Move",
+    default=True,
+    type="PASSWORD"
+)
 
 Move_Disk = vm_disk_package(
     name="move_disk",
@@ -26,12 +35,21 @@ Move_Disk = vm_disk_package(
 )
 
 MOVE_QCOW2_URL = os.getenv("MOVE_QCOW2_URL")
+PROJECT_NETWORK = os.getenv("PROJECT_NETWORK")
 
 
 class MoveVM(Service):
     """Move service"""
 
-    pass
+    @action
+    def __create__():
+
+        CalmTask.Delay(delay_seconds=60)
+        
+        CalmTask.Exec.escript(
+            filename="scripts/move_initial_config.py",
+            name="MoveInitialConfigTask"
+        )
 
 
 class MovePackage(Package):
@@ -48,7 +66,7 @@ class MoveVMS(Substrate):
         disk_packages={1: Move_Disk}
     )
 
-    provider_spec.spec['resources']['nic_list'].append(AhvVmNic("dnd-jose.gomez").compile())
+    provider_spec.spec['resources']['nic_list'].append(AhvVmNic(PROJECT_NETWORK).compile())
 
     readiness_probe = {
         "disabled": True,

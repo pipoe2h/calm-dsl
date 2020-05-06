@@ -94,7 +94,7 @@ class ControlVM_Package(Package):
     def __install__():
         CalmTask.Exec.ssh(
             filename="scripts/shell/move_download.sh",
-            name="PackageInstallTask"
+            name="MoveDownloadTask"
         )
 
         CalmTask.Exec.ssh(
@@ -227,6 +227,7 @@ class Default(Profile):
         """ccc"""
 
 class Workload_Mobility_Setup(Blueprint):
+    """* [Repo](https://@@{ControlVM.address}@@:8080)"""
 
     credentials = [
         Cred_OS,
