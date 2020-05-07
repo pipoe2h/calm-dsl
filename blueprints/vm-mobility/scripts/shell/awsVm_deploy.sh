@@ -5,7 +5,12 @@ AWS_AMI_ID="@@{AWS_AMI_ID}@@"
 AWS_REGION="@@{AWS_REGION}@@"
 AWS_VPC_ID="@@{AWS_VPC_ID}@@"
 AWS_SG_ID="@@{AWS_SG_ID}@@"
-MOVE_VAPP_IP="@@{CALMDSL_MOVE_VAPP_IP}@@"
+MOVE_VAPP_IP="@@{MOVE_VAPP_IP}@@"
+PE_UUID="@@{PE_UUID}@@"
+SC_UUID="@@{SC_UUID}@@"
+AHV_NETWORK="@@{PROJECT_NETWORK}@@"
+MOVE_AWS_PROVIDERUUID="@@{MOVE_AWS_PROVIDERUUID}@@"
+MOVE_AHV_PROVIDERUUID="@@{MOVE_AHV_PROVIDERUUID}@@"
 
 git --work-tree $HOME/calm-dsl/ --git-dir calm-dsl/.git pull
 
@@ -17,6 +22,11 @@ docker run --rm -it \
     -e CALMDSL_AWS_VPC_ID=$AWS_VPC_ID \
     -e CALMDSL_AWS_SG_ID=$AWS_SG_ID \
     -e CALMDSL_MOVE_VAPP_IP=$MOVE_VAPP_IP \
+    -e CALMDSL_PE_UUID=$PE_UUID \
+    -e CALMDSL_SC_UUID=$SC_UUID \
+    -e CALMDSL_AHV_NETWORK=$AHV_NETWORK \
+    -e CALMDSL_MOVE_AWS_PROVIDERUUID=$MOVE_AWS_PROVIDERUUID \
+    -e CALMDSL_MOVE_AHV_PROVIDERUUID=$MOVE_AHV_PROVIDERUUID \
     -v $HOME/config/.calm:/root/.calm \
     -v $HOME/$BP_DIR_PATH/:/root/vm-mobility/ ntnx/calm-dsl \
     /bin/bash -c " \

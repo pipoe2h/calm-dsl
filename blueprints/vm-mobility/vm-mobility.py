@@ -86,6 +86,12 @@ class ControlVM(Service):
     AWS_AMI_ID = Variable.Simple.string('',name='AWS_AMI_ID')
     AWS_SG_ID = Variable.Simple.string('',name='AWS_SG_ID')
     AWS_VPC_ID = Variable.Simple.string('',name='AWS_VPC_ID')
+    MOVE_AWS_PROVIDERUUID = Variable.Simple.string('',name='MOVE_AWS_PROVIDERUUID')
+    MOVE_AHV_PROVIDERUUID = Variable.Simple.string('',name='MOVE_AHV_PROVIDERUUID')
+    MOVE_VAPP_IP = Variable.Simple.string('',name='MOVE_VAPP_IP')
+    PC_IP = Variable.Simple.string('',name='PC_IP')
+    PE_UUID = Variable.Simple.string('',name='PE_UUID')
+    SC_UUID = Variable.Simple.string('',name='SC_UUID')
 
 class ControlVM_Package(Package):
     services = [ref(ControlVM)]
@@ -133,6 +139,14 @@ class ControlVM_Substrate(Substrate):
         "credential": ref(Cred_OS),
     }
 
+    @action
+    def __pre_create__():
+        CalmTask.SetVariable.escript(
+            filename="scripts/escript/get_prismCentral.py",
+            name="GetPcTask",
+            variables=['PC_IP','PE_UUID','SC_UUID']
+        )
+
 
 class ControlVM_Deployment(Deployment):
 
@@ -167,11 +181,11 @@ class Default(Profile):
         name="AWS_SOURCE_AMI"
     )
 
-    PC_IP = Variable.Simple.string(
-        "x.x.x.x",
-        is_mandatory=True,
-        runtime=True
-    )
+    # PC_IP = Variable.Simple.string(
+    #     "x.x.x.x",
+    #     is_mandatory=True,
+    #     runtime=True
+    # )
 
     PROJECT_NETWORK = Variable.WithOptions.FromTask(
         CalmTask.HTTP.post(
@@ -199,6 +213,20 @@ class Default(Profile):
             target=ref(ControlVM)
         )
 
+        CalmTask.SetVariable.escript(
+            filename="scripts/escript/get_vmIp_byName.py",
+            name="GetVmIpTask",
+            variables=['MOVE_VAPP_IP'],
+            target=ref(ControlVM)
+        )
+
+        CalmTask.SetVariable.escript(
+            filename="scripts/escript/move_configure_providers.py",
+            name="MoveConfAwsProvTask",
+            variables=['MOVE_AWS_PROVIDERUUID','MOVE_AHV_PROVIDERUUID'],
+            target=ref(ControlVM)
+        )
+
     @action
     def Second_Deploy_AWS_Demo_VM():
 
@@ -221,10 +249,7 @@ class Default(Profile):
             name="AwsVmDeployTask",
             target=ref(ControlVM)
         )
-    
-    @action
-    def Third_Migrate_VM():
-        """ccc"""
+
 
 class Workload_Mobility_Setup(Blueprint):
     """* [Repo](http://@@{ControlVM.address}@@:8080)"""

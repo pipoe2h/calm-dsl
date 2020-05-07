@@ -28,10 +28,17 @@ AWS_REGION = os.getenv("CALMDSL_AWS_REGION")
 AWS_VPC_ID = os.getenv("CALMDSL_AWS_VPC_ID")
 AWS_SG_ID = os.getenv("CALMDSL_AWS_SG_ID")
 MOVE_VAPP_IP = os.getenv("CALMDSL_MOVE_VAPP_IP")
+PE_UUID = os.getenv("CALMDSL_PE_UUID")
+SC_UUID = os.getenv("CALMDSL_SC_UUID")
+AHV_NETWORK = os.getenv("CALMDSL_AHV_NETWORK")
+MOVE_AWS_PROVIDERUUID = os.getenv("CALMDSL_MOVE_AWS_PROVIDERUUID")
+MOVE_AHV_PROVIDERUUID = os.getenv("CALMDSL_MOVE_AHV_PROVIDERUUID")
 
 class AwsVmService(Service):
     """AWS VM"""
 
+    MOVE_AWS_VM_UUID = Variable.Simple.string('',name='MOVE_AWS_VM_UUID')
+    MOVE_AWS_VM_ID = Variable.Simple.string('',name='MOVE_AWS_VM_ID')
 
 class AwsVmPackage(Package):
 
@@ -83,13 +90,55 @@ class AwsVmProfile(Profile):
         is_hidden=True
     )
 
+    peUuid = Variable.Simple.string(
+        PE_UUID,
+        is_hidden=True
+    )
+
+    scUuid = Variable.Simple.string(
+        SC_UUID,
+        is_hidden=True
+    )
+
+    awsVpcId = Variable.Simple.string(
+        AWS_VPC_ID,
+        is_hidden=True
+    )
+
+    ahvNetwork = Variable.Simple.string(
+        AHV_NETWORK,
+        is_hidden=True
+    )
+
+    awsRegion = Variable.Simple.string(
+        AWS_REGION,
+        is_hidden=True
+    )
+
+    moveAwsProviderUuid = Variable.Simple.string(
+        MOVE_AWS_PROVIDERUUID,
+        is_hidden=True
+    )
+
+    moveAhvProviderUuid = Variable.Simple.string(
+        MOVE_AHV_PROVIDERUUID,
+        is_hidden=True
+    )
+
     @action
     def MigrateWorkload():
-        """a"""
+
+        CalmTask.SetVariable.escript(
+            filename="scripts/get_ec2.py",
+            name="GetEc2Task",
+            variables=['MOVE_AWS_VM_UUID','MOVE_AWS_VM_ID'],
+            target=ref(AwsVmService)
+        )
 
         CalmTask.Exec.escript(
             filename="scripts/move_create_migration_plan.py",
-            name="CreateMigrationPlanTask"
+            name="CreateMigrationPlanTask",
+            target=ref(AwsVmService)
         )
 
 

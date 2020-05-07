@@ -1,6 +1,15 @@
 #script
-move_ip = '@@{address}@@'
+move_ip = '@@{Move_IP}@@'
 move_password = '@@{Cred_Move.secret}@@'
+Move_AHV_ClusterUUID = '@@{peUuid}@@'
+Move_AHV_ContainerUUID = '@@{scUuid}@@'
+Move_AHV_Network = '@@{ahvNetwork}@@'
+Move_AWS_Vpc = '@@{awsVpcId}@@'
+Move_AWS_Region = '@@{awsRegion}@@'
+Move_AWS_ProviderUUID = '@@{moveAwsProviderUuid}@@'
+Move_AHV_ProviderUUID = '@@{moveAhvProviderUuid}@@'
+Move_AWS_VmUUID = '@@{MOVE_AWS_VM_UUID}@@'
+Move_AWS_VmID = '@@{MOVE_AWS_VM_ID}@@'
 
 # Get auth token
 api_url = 'https://{}/move/v2/users/login'.format(move_ip)
@@ -57,7 +66,7 @@ payload = {
                         "UUID": Move_AWS_VmUUID,
                         "VMID": Move_AWS_VmID
                     },
-                    "GuestPrepMode": "manual",
+                    "GuestPrepMode": "auto",
                     "RetainMacAddress": True,
                     "PowerOffForpRDMtovRDMConversion": True
                 }
