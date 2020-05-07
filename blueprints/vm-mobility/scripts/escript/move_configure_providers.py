@@ -26,6 +26,8 @@ else:
     print("Get request failed", r.content)
     exit(1)
 
+sleep(60)
+
 # Create AWS Provider
 api_url = 'https://{}/move/v2/providers'.format(move_ip)
 headers = {'Content-Type': 'application/json',  'Accept':'application/json', 'Authorization': '{}'.format(move_token)}
