@@ -227,7 +227,7 @@ class Default(Profile):
         """ccc"""
 
 class Workload_Mobility_Setup(Blueprint):
-    """* [Repo](https://@@{ControlVM.address}@@:8080)"""
+    """* [Repo](http://@@{ControlVM.address}@@:8080)"""
 
     credentials = [
         Cred_OS,

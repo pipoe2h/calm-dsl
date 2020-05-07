@@ -6,7 +6,7 @@ MOVE_PASSWORD="@@{Cred_PC.secret}@@"
 
 git --work-tree $HOME/calm-dsl/ --git-dir calm-dsl/.git pull
 
-docker run --rm --name calm-dsl \
+docker run --rm -it\
     -e MOVE_QCOW2_URL=$MOVE_IMAGE_URL \
     -e PROJECT_NETWORK=$PROJECT_NETWORK \
     -e CALMDSL_MOVE_PASSWORD=$MOVE_PASSWORD \
@@ -18,4 +18,4 @@ docker run --rm --name calm-dsl \
     && calm launch bp -i \
     -a @@{calm_application_name}@@-app-move-vApp \
     @@{calm_application_name}@@-bp-move-vApp \
-    && calm watch app @@{calm_application_name}@@-bp-move-vApp"
+    && calm watch app @@{calm_application_name}@@-app-move-vApp"

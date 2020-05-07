@@ -6,6 +6,8 @@ from calm.dsl.builtins import read_local_file, read_provider_spec
 from calm.dsl.builtins import Service, Package, Substrate
 from calm.dsl.builtins import Deployment, Profile, Blueprint
 
+from calm.dsl.builtins import CalmVariable as Variable
+
 # Credentials definition
 OS_USERNAME = os.getenv("CALMDSL_OS_USERNAME") or read_local_file(
     os.path.join("secrets", "os_username")
@@ -25,6 +27,7 @@ AWS_AMI_ID = os.getenv("CALMDSL_AWS_AMI_ID")
 AWS_REGION = os.getenv("CALMDSL_AWS_REGION")
 AWS_VPC_ID = os.getenv("CALMDSL_AWS_VPC_ID")
 AWS_SG_ID = os.getenv("CALMDSL_AWS_SG_ID")
+MOVE_VAPP_IP = os.getenv("CALMDSL_MOVE_VAPP_IP")
 
 class AwsVmService(Service):
     """AWS VM"""
@@ -75,8 +78,23 @@ class AwsVmProfile(Profile):
 
     deployments = [AwsVmDeployment]
 
+    Move_IP = Variable.Simple.string(
+        MOVE_VAPP_IP,
+        is_hidden=True
+    )
+
+    @action
+    def MigrateWorkload():
+        """a"""
+
+        CalmTask.Exec.escript(
+            filename="scripts/move_create_migration_plan.py",
+            name="CreateMigrationPlanTask"
+        )
+
 
 class AwsBlueprint(Blueprint):
+    """* [WebApp](http://@@{AwsVmService.address}@@)"""
 
     credentials = [Cred_OS]
     services = [AwsVmService]

@@ -6,7 +6,7 @@ PROJECT="@@{calm_project_name}@@"
 git clone --single-branch --branch vm-mobility https://github.com/pipoe2h/calm-dsl.git
 
 mkdir -p $HOME/config/.calm
-docker run --rm --name calm-dsl \
+docker run --rm \
     -v $HOME/config/.calm:/root/.calm \
     ntnx/calm-dsl \
     calm init dsl -i $PC_IP -P 9440 -u $PC_ADMIN -p $PC_PASSWORD -pj $PROJECT
