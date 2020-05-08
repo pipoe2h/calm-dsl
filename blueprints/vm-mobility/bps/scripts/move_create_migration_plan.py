@@ -77,8 +77,9 @@ payload = {
 r = urlreq(api_url, verb='POST', params=json.dumps(payload), headers=headers, verify=False)
 if r.ok:
     resp = json.loads(r.content)
-    print(resp['Status']['State'])
-
+    planUuid = resp['MetaData']['UUID']
 else:
     print("Get request failed", r.content)
     exit(1)
+
+print("MOVE_PLANUUID={}".format(planUuid))

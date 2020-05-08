@@ -51,6 +51,7 @@ class AwsVmService(Service):
 
     MOVE_AWS_VM_UUID = Variable.Simple.string('',name='MOVE_AWS_VM_UUID')
     MOVE_AWS_VM_ID = Variable.Simple.string('',name='MOVE_AWS_VM_ID')
+    MOVE_PLANUUID = Variable.Simple.string('',name='MOVE_PLANUUID')
 
 class AwsVmPackage(Package):
 
@@ -147,9 +148,10 @@ class AwsVmProfile(Profile):
             target=ref(AwsVmService)
         )
 
-        CalmTask.Exec.escript(
+        CalmTask.SetVariable.escript(
             filename="scripts/move_create_migration_plan.py",
             name="CreateMigrationPlanTask",
+            variables=['MOVE_PLANUUID'],
             target=ref(AwsVmService)
         )
 
