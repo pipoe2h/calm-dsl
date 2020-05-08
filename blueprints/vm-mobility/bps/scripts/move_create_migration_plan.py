@@ -2,7 +2,7 @@ move_ip = '@@{Move_IP}@@'
 move_password = '@@{Cred_Move.secret}@@'
 Move_AHV_ClusterUUID = '@@{peUuid}@@'
 Move_AHV_ContainerUUID = '@@{scUuid}@@'
-Move_AHV_Network = '@@{ahvNetwork}@@'
+Move_AHV_NetworkUuid = '@@{ahvNetworkUuid}@@'
 Move_AWS_Vpc = '@@{awsVpcId}@@'
 Move_AWS_Region = '@@{awsRegion}@@'
 Move_AWS_ProviderUUID = '@@{moveAwsProviderUuid}@@'
@@ -52,7 +52,7 @@ payload = {
         "NetworkMappings": [
             {
                 "SourceNetworkID": Move_AWS_Vpc,
-                "TargetNetworkID": Move_AHV_Network,
+                "TargetNetworkID": Move_AHV_NetworkUuid,
                 "TestNetworkID": ""
             }
         ],

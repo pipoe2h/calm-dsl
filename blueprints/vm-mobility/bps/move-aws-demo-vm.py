@@ -42,7 +42,7 @@ AWS_SG_ID = os.getenv("CALMDSL_AWS_SG_ID")
 MOVE_VAPP_IP = os.getenv("CALMDSL_MOVE_VAPP_IP")
 PE_UUID = os.getenv("CALMDSL_PE_UUID")
 SC_UUID = os.getenv("CALMDSL_SC_UUID")
-AHV_NETWORK = os.getenv("CALMDSL_AHV_NETWORK")
+AHV_NETWORKUUID = os.getenv("CALMDSL_AHV_NETWORKUUID")
 MOVE_AWS_PROVIDERUUID = os.getenv("CALMDSL_MOVE_AWS_PROVIDERUUID")
 MOVE_AHV_PROVIDERUUID = os.getenv("CALMDSL_MOVE_AHV_PROVIDERUUID")
 
@@ -117,8 +117,8 @@ class AwsVmProfile(Profile):
         is_hidden=True
     )
 
-    ahvNetwork = Variable.Simple.string(
-        AHV_NETWORK,
+    ahvNetworkUuid = Variable.Simple.string(
+        AHV_NETWORKUUID,
         is_hidden=True
     )
 

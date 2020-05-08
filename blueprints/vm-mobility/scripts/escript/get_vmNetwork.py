@@ -1,0 +1,2 @@
+print("PROJECT_NETWORKUUID={}".format("@@{platform.status.resources.nic_list[0].subnet_reference.uuid}@@"))
+print("PROJECT_NETWORK={}".format("@@{platform.status.resources.nic_list[0].subnet_reference.name}@@"))

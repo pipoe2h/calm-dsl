@@ -77,10 +77,12 @@ class ControlVM(Service):
     """Control VM for downloading Move """
 
     @action
-    def DeployMove():
-        CalmTask.Exec.ssh(
-            filename="scripts/shell/move_deploy.sh",
-            name="MoveDeployTask"
+    def __create__():
+
+        CalmTask.SetVariable.escript(
+            filename="scripts/escript/get_vmNetwork.py",
+            name="GetVmNetworkTask",
+            variables=['PROJECT_NETWORKUUID','PROJECT_NETWORK']
         )
 
     AWS_AMI_ID = Variable.Simple.string('',name='AWS_AMI_ID')
@@ -92,6 +94,8 @@ class ControlVM(Service):
     PC_IP = Variable.Simple.string('',name='PC_IP')
     PE_UUID = Variable.Simple.string('',name='PE_UUID')
     SC_UUID = Variable.Simple.string('',name='SC_UUID')
+    PROJECT_NETWORKUUID = Variable.Simple.string('',name='PROJECT_NETWORKUUID')
+    PROJECT_NETWORK = Variable.Simple.string('',name='PROJECT_NETWORK')
 
 class ControlVM_Package(Package):
     services = [ref(ControlVM)]
@@ -108,10 +112,10 @@ class ControlVM_Package(Package):
             name="DockerInstallTask"
         )
 
-        CalmTask.Exec.ssh(
-            filename="scripts/shell/dockerCompose_install.sh",
-            name="DockerComposeInstallTask"
-        )
+        # CalmTask.Exec.ssh(
+        #     filename="scripts/shell/dockerCompose_install.sh",
+        #     name="DockerComposeInstallTask"
+        # )
 
         CalmTask.Exec.ssh(
             filename="scripts/shell/dockerHttpd_run.sh",
@@ -187,22 +191,22 @@ class Default(Profile):
     #     runtime=True
     # )
 
-    PROJECT_NETWORK = Variable.WithOptions.FromTask(
-        CalmTask.HTTP.post(
-            "https://localhost:9440/api/nutanix/v3/projects/list",
-            credential=Cred_PC,
-            body=json.dumps({"filter": "name==@@{calm_project_name}@@"}),
-            # Headers in HTTP variables are bugged:
-            # https://jira.nutanix.com/browse/CALM-13724
-            # headers={"Content-Type": "application/json"},
-            content_type="application/json",
-            verify=False,
-            status_mapping={200: True},
-            name="PROJECT_NETWORK",
-            response_paths={"PROJECT_NETWORK": "$.entities[0].spec.resources.subnet_reference_list[*].name"}
-        ),
-        label="Select network"
-    )
+    # PROJECT_NETWORK = Variable.WithOptions.FromTask(
+    #     CalmTask.HTTP.post(
+    #         "https://localhost:9440/api/nutanix/v3/projects/list",
+    #         credential=Cred_PC,
+    #         body=json.dumps({"filter": "name==@@{calm_project_name}@@"}),
+    #         # Headers in HTTP variables are bugged:
+    #         # https://jira.nutanix.com/browse/CALM-13724
+    #         # headers={"Content-Type": "application/json"},
+    #         content_type="application/json",
+    #         verify=False,
+    #         status_mapping={200: True},
+    #         name="PROJECT_NETWORK",
+    #         response_paths={"PROJECT_NETWORK": "$.entities[0].spec.resources.subnet_reference_list[*].name"}
+    #     ),
+    #     label="Select network"
+    # )
 
     @action
     def First_Deploy_Move():
