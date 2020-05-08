@@ -51,5 +51,5 @@ else:
     print("Get request failed", r.content)
     exit(1)
 
-print("MOVE_AWS_VM_UUID".format(awsVmUuid))
-print("MOVE_AWS_VM_ID".format(awsVmId))
+print("MOVE_AWS_VM_UUID={}".format(awsVmUuid))
+print("MOVE_AWS_VM_ID={}".format(awsVmId))
