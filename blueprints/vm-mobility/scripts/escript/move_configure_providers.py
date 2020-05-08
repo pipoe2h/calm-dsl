@@ -1,4 +1,3 @@
-#script
 move_ip = '@@{MOVE_VAPP_IP}@@'
 move_password = '@@{Cred_PC.secret}@@'
 AWS_ACCESS_KEY = '@@{Cred_AWS.username}@@'

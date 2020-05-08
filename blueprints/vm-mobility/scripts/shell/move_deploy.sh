@@ -1,7 +1,7 @@
 BP_DIR_PATH="calm-dsl/blueprints/vm-mobility"
 MOVE_IMAGE_URL="http://@@{address}@@:8080/move-@@{Move_Version}@@/move-@@{Move_Version}@@.qcow2"
 PROJECT_NETWORK="@@{PROJECT_NETWORK}@@"
-MOVE_PASSWORD="@@{Cred_PC.secret}@@"
+MOVE_PASSWORD=@@{Cred_PC.secret}@@
 
 
 git --work-tree $HOME/calm-dsl/ --git-dir calm-dsl/.git pull

@@ -11,6 +11,7 @@ SC_UUID="@@{SC_UUID}@@"
 AHV_NETWORK="@@{PROJECT_NETWORK}@@"
 MOVE_AWS_PROVIDERUUID="@@{MOVE_AWS_PROVIDERUUID}@@"
 MOVE_AHV_PROVIDERUUID="@@{MOVE_AHV_PROVIDERUUID}@@"
+MOVE_PASSWORD=@@{Cred_PC.secret}@@
 
 git --work-tree $HOME/calm-dsl/ --git-dir calm-dsl/.git pull
 
@@ -27,6 +28,7 @@ docker run --rm -it \
     -e CALMDSL_AHV_NETWORK=$AHV_NETWORK \
     -e CALMDSL_MOVE_AWS_PROVIDERUUID=$MOVE_AWS_PROVIDERUUID \
     -e CALMDSL_MOVE_AHV_PROVIDERUUID=$MOVE_AHV_PROVIDERUUID \
+    -e CALMDSL_MOVE_PASSWORD=$MOVE_PASSWORD \
     -v $HOME/config/.calm:/root/.calm \
     -v $HOME/$BP_DIR_PATH/:/root/vm-mobility/ ntnx/calm-dsl \
     /bin/bash -c " \

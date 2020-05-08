@@ -1,4 +1,3 @@
-#script
 move_ip = '@@{address}@@'
 move_new_password = '@@{Cred_Move.secret}@@'
 

@@ -1,4 +1,3 @@
-#script
 move_ip = '@@{Move_IP}@@'
 move_password = '@@{Cred_Move.secret}@@'
 vm_name = '@@{name}@@'

@@ -1,4 +1,3 @@
-#script
 jwt = '@@{calm_jwt}@@'
 project_name = '@@{calm_project_name}@@'
 

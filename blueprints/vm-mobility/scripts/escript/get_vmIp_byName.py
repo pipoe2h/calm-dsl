@@ -1,7 +1,6 @@
 jwt = '@@{calm_jwt}@@'
 vm_name = '@@{calm_application_name}@@-app-move-vApp'
 
-
 ### Get VM
 headers = {'Content-Type': 'application/json',  'Accept':'application/json', 'Authorization': 'Bearer {}'.format(jwt)}
 

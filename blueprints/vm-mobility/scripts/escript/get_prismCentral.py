@@ -1,4 +1,3 @@
-#script
 jwt = '@@{calm_jwt}@@'
 
 # Get PC IP and PE uuid

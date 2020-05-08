@@ -23,6 +23,18 @@ Cred_OS = basic_cred(
     type="PASSWORD"
 )
 
+MOVE_USERNAME = "nutanix"
+MOVE_PASSWORD = os.getenv("CALMDSL_MOVE_PASSWORD") or read_local_file(
+    os.path.join("secrets", "move_password")
+)
+Cred_Move = basic_cred(
+    username=MOVE_USERNAME,
+    password=MOVE_PASSWORD,
+    name="Cred_Move",
+    default=True,
+    type="PASSWORD"
+)
+
 AWS_AMI_ID = os.getenv("CALMDSL_AWS_AMI_ID")
 AWS_REGION = os.getenv("CALMDSL_AWS_REGION")
 AWS_VPC_ID = os.getenv("CALMDSL_AWS_VPC_ID")
@@ -145,7 +157,7 @@ class AwsVmProfile(Profile):
 class AwsBlueprint(Blueprint):
     """* [WebApp](http://@@{AwsVmService.address}@@)"""
 
-    credentials = [Cred_OS]
+    credentials = [Cred_OS,Cred_Move]
     services = [AwsVmService]
     packages = [AwsVmPackage]
     substrates = [AwsVmSubstrate]

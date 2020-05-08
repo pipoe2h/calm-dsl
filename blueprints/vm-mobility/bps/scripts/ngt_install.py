@@ -1,4 +1,3 @@
-#script
 jwt = '@@{calm_jwt}@@'
 vm_uuid = '@@{id}@@'
 os_username = '@@{Centos.username}@@'
