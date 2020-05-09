@@ -31,7 +31,7 @@ if r.ok:
     
     while "Progress" not in resp['Status']['VMStatus'][0]:
 
-        if "RETRY" in resp['Status']['VMStatus'][0]['Actions'][0]:
+        if "RETRY" in resp['Status']['VMStatus'][0]:
             print(resp['Status']['VMStatus'][0]['ErrorMessage'])
             exit(1)
 
