@@ -30,6 +30,11 @@ if r.ok:
     resp = json.loads(r.content)
     
     while "Progress" not in resp['Status']['VMStatus'][0]:
+
+        if "RETRY" in resp['Status']['VMStatus'][0]['Actions'][0]:
+            print(resp['Status']['VMStatus'][0]['ErrorMessage'])
+            exit(1)
+
         r = urlreq(api_url, verb='POST', headers=headers, verify=False)
 
         if r.ok:
