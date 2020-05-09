@@ -155,6 +155,8 @@ class AwsVmProfile(Profile):
             target=ref(AwsVmService)
         )
 
+        CalmTask.Delay(delay_seconds=60, target=ref(AwsVmService))
+
         CalmTask.Exec.escript(
             filename="scripts/move_prepare_migration_plan.py",
             name="PrepareMigrationPlanTask",
@@ -167,6 +169,17 @@ class AwsVmProfile(Profile):
             target=ref(AwsVmService)
         )
 
+        CalmTask.Exec.escript(
+            filename="scripts/move_monitor_migration_plan.py",
+            name="MonitorMigrationPlanTask",
+            target=ref(AwsVmService)
+        )
+
+        CalmTask.Exec.escript(
+            filename="scripts/move_cutover_migration_plan.py",
+            name="CutoverMigrationPlanTask",
+            target=ref(AwsVmService)
+        )
 
 
 class AwsBlueprint(Blueprint):
