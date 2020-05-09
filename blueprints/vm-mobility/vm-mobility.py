@@ -172,11 +172,29 @@ class Default(Profile):
         is_hidden=True
     )
 
-    AWS_REGION = Variable.Simple.string(
-        "eu-west-2",
-        is_mandatory=True,
-        runtime=True,
-        name="AWS_REGION"
+    # AWS_REGION = Variable.Simple.string(
+    #     "eu-west-2",
+    #     is_mandatory=True,
+    #     runtime=True,
+    #     name="AWS_REGION"
+    # )
+
+    AWS_REGION = Variable.WithOptions.FromTask(
+        CalmTask.HTTP.post(
+            "https://localhost:9440/api/nutanix/v3/accounts/list",
+            credential=Cred_PC,
+            body=json.dumps({"filter": "type==aws"}),
+            # Headers in HTTP variables are bugged:
+            # https://jira.nutanix.com/browse/CALM-13724
+            # headers={"Content-Type": "application/json"},
+            content_type="application/json",
+            verify=False,
+            status_mapping={200: True},
+            name="AWS_REGION",
+            response_paths={"AWS_REGION": "$.entities[0].status.resources.data.regions[*].name"}
+        ),
+        label="Select AWS Region",
+        is_mandatory=True
     )
 
     AWS_SOURCE_AMI = Variable.Simple.string(
