@@ -155,6 +155,19 @@ class AwsVmProfile(Profile):
             target=ref(AwsVmService)
         )
 
+        CalmTask.Exec.escript(
+            filename="scripts/move_prepare_migration_plan.py",
+            name="PrepareMigrationPlanTask",
+            target=ref(AwsVmService)
+        )
+
+        CalmTask.Exec.escript(
+            filename="scripts/move_start_migration_plan.py",
+            name="StartMigrationPlanTask",
+            target=ref(AwsVmService)
+        )
+
+
 
 class AwsBlueprint(Blueprint):
     """* [WebApp](http://@@{AwsVmService.address}@@)"""

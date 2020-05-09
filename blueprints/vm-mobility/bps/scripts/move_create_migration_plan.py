@@ -60,13 +60,13 @@ payload = {
             "Type": "VM",
             "VMs": [
                 {
-                    "AllowUVMOps": False,
+                    "AllowUVMOps": True,
                     "VMReference": {
                         "UUID": Move_AWS_VmUUID,
                         "VMID": Move_AWS_VmID
                     },
                     "GuestPrepMode": "auto",
-                    "RetainMacAddress": True,
+                    "RetainMacAddress": False,
                     "PowerOffForpRDMtovRDMConversion": True
                 }
             ]
