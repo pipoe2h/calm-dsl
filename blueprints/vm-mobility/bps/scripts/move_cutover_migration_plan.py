@@ -34,6 +34,17 @@ payload = {
 
 r = urlreq(api_url, verb='POST', params=json.dumps(payload), headers=headers, verify=False)
 if r.ok:
+    pass
+
+else:
+    print("Request failed", r.content)
+    exit(1)
+
+# Monitor Cutover
+api_url = 'https://{}/move/v2/plans/{}/workloads/list'.format(move_ip,Move_PlanUUID)
+
+r = urlreq(api_url, verb='POST', headers=headers, verify=False)
+if r.ok:
     resp = json.loads(r.content)
     
     while "DELETE" not in resp['Status']['Actions']:
