@@ -46,6 +46,9 @@ api_url = 'https://{}/move/v2/plans/{}/workloads/list'.format(move_ip,Move_PlanU
 r = urlreq(api_url, verb='POST', headers=headers, verify=False)
 if r.ok:
     resp = json.loads(r.content)
+
+    print("========CUTOVER========")
+    print(r.content)
     
     while "DELETE" not in resp['Status']['Actions']:
         r = urlreq(api_url, verb='POST', headers=headers, verify=False)
