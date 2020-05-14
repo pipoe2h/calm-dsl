@@ -45,6 +45,7 @@ SC_UUID = os.getenv("CALMDSL_SC_UUID")
 AHV_NETWORKUUID = os.getenv("CALMDSL_AHV_NETWORKUUID")
 MOVE_AWS_PROVIDERUUID = os.getenv("CALMDSL_MOVE_AWS_PROVIDERUUID")
 MOVE_AHV_PROVIDERUUID = os.getenv("CALMDSL_MOVE_AHV_PROVIDERUUID")
+CALM_AWS_ACCOUNT = os.getenv("CALMDSL_CALM_AWS_ACCOUNT")
 
 class AwsVmService(Service):
     """AWS VM"""
@@ -52,6 +53,7 @@ class AwsVmService(Service):
     MOVE_AWS_VM_UUID = Variable.Simple.string('',name='MOVE_AWS_VM_UUID')
     MOVE_AWS_VM_ID = Variable.Simple.string('',name='MOVE_AWS_VM_ID')
     MOVE_PLANUUID = Variable.Simple.string('',name='MOVE_PLANUUID')
+    AHV_VM_UUID = Variable.Simple.string('',name='AHV_VM_UUID')
 
 class AwsVmPackage(Package):
 
@@ -61,7 +63,12 @@ class AwsVmPackage(Package):
     def __install__():
         CalmTask.Exec.ssh(
             filename="scripts/centos_install_httpd.sh",
-            name="PackageInstallTask"
+            name="CentosInstallTask"
+        )
+
+        CalmTask.Exec.ssh(
+            filename="scripts/centos_move_prepare.sh",
+            name="MovePrepareTask"
         )
 
 
@@ -69,6 +76,7 @@ class AwsVmSubstrate(Substrate):
     """AWS VM config given by reading a spec file"""
 
     provider_spec = read_provider_spec("specs/aws_spec_centos.yaml")
+    provider_spec.spec['resources']['account_uuid'] = CALM_AWS_ACCOUNT
     provider_spec.spec['resources']['image_id'] = AWS_AMI_ID
     provider_spec.spec['resources']['region'] = AWS_REGION
     provider_spec.spec['resources']['vpc_id'] = AWS_VPC_ID
@@ -175,9 +183,16 @@ class AwsVmProfile(Profile):
             target=ref(AwsVmService)
         )
 
-        CalmTask.Exec.escript(
+        CalmTask.SetVariable.escript(
             filename="scripts/move_cutover_migration_plan.py",
             name="CutoverMigrationPlanTask",
+            variables=['AHV_VM_UUID'],
+            target=ref(AwsVmService)
+        )
+
+        CalmTask.Exec.escript(
+            filename="scripts/ahv_brownfield_import.py",
+            name="AhvBrownfieldImportTask",
             target=ref(AwsVmService)
         )
 

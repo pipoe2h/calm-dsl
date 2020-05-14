@@ -1,13 +1,12 @@
 name: "@@{calm_application_name}@@"
 resources:
-  account_uuid: dd541fe2-7915-9eab-39b1-d0b74f303005
   associate_public_ip_address: true
   block_device_map:
     data_disk_list: []
     root_disk:
       delete_on_termination: true
       device_name: /dev/sda1
-      size_gb: 10
+      size_gb: 8
       volume_type: GP2
   instance_type: t2.micro
   key_name: jose.gomez
@@ -23,5 +22,5 @@ resources:
         @@{Cred_OS.username}@@:@@{Cred_OS.secret}@@
       expire: False
     ssh_pwauth: True
-  subnet_id: subnet-562eab2c
+#  subnet_id: subnet-562eab2c
 type: PROVISION_AWS_VM

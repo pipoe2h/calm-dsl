@@ -57,11 +57,6 @@ Cred_AWS = basic_cred(
     type="PASSWORD"
 )
 
-# Downloadable images for AHV and VMware
-# AHV_CENTOS_76 = vm_disk_package(
-#     name="AHV_CENTOS_76", config_file="specs/image_config/ahv_centos.yaml"
-# )
-
 AHV_CENTOS_76 = vm_disk_package(
     name="AHV_CENTOS_76",
     config={
@@ -97,6 +92,7 @@ class ControlVM(Service):
     PROJECT_NETWORKUUID = Variable.Simple.string('',name='PROJECT_NETWORKUUID')
     PROJECT_NETWORK = Variable.Simple.string('',name='PROJECT_NETWORK')
 
+
 class ControlVM_Package(Package):
     services = [ref(ControlVM)]
 
@@ -129,12 +125,15 @@ class ControlVM_Package(Package):
 
 
 class ControlVM_Substrate(Substrate):
+
     os_type = "Linux"
+    
     provider_spec = read_ahv_spec(
         "specs/substrate/controlVm-spec.yaml",
         disk_packages={1: AHV_CENTOS_76}
     )
-    provider_spec.spec["name"] = "jg-moveControlVm-@@{calm_random}@@"
+    provider_spec.spec["name"] = "demo-moveControlVm-@@{calm_random}@@"
+    
     readiness_probe = {
         "disabled": False,
         "delay_secs": "60",
@@ -203,29 +202,6 @@ class Default(Profile):
         name="AWS_SOURCE_AMI"
     )
 
-    # PC_IP = Variable.Simple.string(
-    #     "x.x.x.x",
-    #     is_mandatory=True,
-    #     runtime=True
-    # )
-
-    # PROJECT_NETWORK = Variable.WithOptions.FromTask(
-    #     CalmTask.HTTP.post(
-    #         "https://localhost:9440/api/nutanix/v3/projects/list",
-    #         credential=Cred_PC,
-    #         body=json.dumps({"filter": "name==@@{calm_project_name}@@"}),
-    #         # Headers in HTTP variables are bugged:
-    #         # https://jira.nutanix.com/browse/CALM-13724
-    #         # headers={"Content-Type": "application/json"},
-    #         content_type="application/json",
-    #         verify=False,
-    #         status_mapping={200: True},
-    #         name="PROJECT_NETWORK",
-    #         response_paths={"PROJECT_NETWORK": "$.entities[0].spec.resources.subnet_reference_list[*].name"}
-    #     ),
-    #     label="Select network"
-    # )
-
     @action
     def First_Deploy_Move():
 
@@ -251,6 +227,56 @@ class Default(Profile):
 
     @action
     def Second_Deploy_AWS_Demo_VM():
+
+        # AWS_REGION = Variable.WithOptions.FromTask(
+        #     CalmTask.HTTP.post(
+        #         "https://localhost:9440/api/nutanix/v3/accounts/list",
+        #         credential=Cred_PC,
+        #         body=json.dumps({"filter": "type==aws"}),
+        #         # Headers in HTTP variables are bugged:
+        #         # https://jira.nutanix.com/browse/CALM-13724
+        #         # headers={"Content-Type": "application/json"},
+        #         content_type="application/json",
+        #         verify=False,
+        #         status_mapping={200: True},
+        #         name="AWS_REGION",
+        #         response_paths={"AWS_REGION": "$.entities[0].status.resources.data.regions[*].name"}
+        #     ),
+        #     label="Select AWS Region",
+        #     is_mandatory=True
+        # )
+
+        # AWS_ACCOUNT = Variable.WithOptions.FromTask(
+        #     CalmTask.HTTP.post(
+        #         "https://localhost:9440/api/nutanix/v3/accounts/list",
+        #         credential=Cred_PC,
+        #         body=json.dumps({"filter": "type==aws"}),
+        #         # Headers in HTTP variables are bugged:
+        #         # https://jira.nutanix.com/browse/CALM-13724
+        #         # headers={"Content-Type": "application/json"},
+        #         content_type="application/json",
+        #         verify=False,
+        #         status_mapping={200: True},
+        #         name="AWS_ACCOUNT",
+        #         response_paths={"AWS_ACCOUNT": "$.entities[0].metadata.uuid"}
+        #     ),
+        #     label="Select AWS Account"
+        # )
+
+        CalmTask.HTTP.post(
+            "https://localhost:9440/api/nutanix/v3/accounts/list",
+            credential=Cred_PC,
+            body=json.dumps({"filter": "type==aws"}),
+            # Headers in HTTP variables are bugged:
+            # https://jira.nutanix.com/browse/CALM-13724
+            # headers={"Content-Type": "application/json"},
+            content_type="application/json",
+            verify=False,
+            status_mapping={200: True},
+            name="GetAwsAccountTask",
+            response_paths={"CALM_AWS_ACCOUNT": "$.entities[0].metadata.uuid"},
+            target=ref(ControlVM)
+        )
 
         CalmTask.SetVariable.escript(
             filename="scripts/aws/copy_ami.py",

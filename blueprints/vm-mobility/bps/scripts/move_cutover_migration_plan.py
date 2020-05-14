@@ -59,7 +59,11 @@ if r.ok:
         else:
             print("Request failed", r.content)
             exit(1)
+    
+    VmConsoleLink = resp['Status']['VMStatus'][0]['VmConsoleLink']
+    AHV_VM_UUID = re.search('vm/(.*)/proxy', VmConsoleLink).group(1)
 
+    print("AHV_VM_UUID={}".format(AHV_VM_UUID))
     print("Migration completed")
 
 else:
