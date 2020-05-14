@@ -2,7 +2,6 @@ jwt = '@@{calm_jwt}@@'
 pc_ip = 'localhost'
 vm_name = '@@{name}@@'
 project_name = '@@{calm_project_name}@@'
-ahv_account_name = 'NTNX_LOCAL_AZ'
 ahv_vm_id = '@@{AHV_VM_UUID}@@'
 username = '@@{Cred_OS.username}@@'
 password = '@@{Cred_OS.secret}@@'
@@ -213,8 +212,7 @@ BP_SPEC = {
     }
 }
 
-
-
+    ### --------------------------------------------------------------------------------- ###
 
 
 def ahv_single_vm_run(spec):
@@ -305,7 +303,7 @@ def ahv_single_vm_run(spec):
         payload = {
             "length":100,
             "offset":0,
-            "filter":"name=={0};type==nutanix_pc".format(account_name)
+            "filter":"name=={0};type==nutanix".format(account_name)
         }
         print("Making a {} API call to {}".format(method, url))
         resp = urlreq(
@@ -333,7 +331,7 @@ def ahv_single_vm_run(spec):
     ### --------------------------------------------------------------------------------- ###
 
     ### --------------------------------------------------------------------------------- ###
-    def get_ahv_vm_ip(base_url, vm_id):
+    def get_ahv_vm(base_url, vm_id):
         method = 'GET'
         url = base_url + "/vms/{}".format(vm_id)
 
@@ -347,8 +345,9 @@ def ahv_single_vm_run(spec):
 
         if resp.ok:
             json_resp = json.loads(resp.content)
-            nic_list = json_resp['spec']['resources']['nic_list']
-            return nic_list[0]['ip_endpoint_list'][0]['ip']
+            vm_ip = json_resp['spec']['resources']['nic_list'][0]['ip_endpoint_list'][0]['ip']
+            cluster_name = json_resp['spec']['cluster_reference']['name']
+            return cluster_name, vm_ip
         else:
             print("Request failed")
             print("Headers: {}".format(headers))
@@ -413,8 +412,8 @@ def ahv_single_vm_run(spec):
 
     ### Get project and account uuid
     project_uuid = get_project_uuid(base_url, project_name)
+    ahv_account_name, ahv_vm_ip = get_ahv_vm(base_url, ahv_vm_id)
     account_uuid = get_ahv_account_uuid(base_url, ahv_account_name)
-    ahv_vm_ip = get_ahv_vm_ip(base_url, ahv_vm_id)
 
     brownfield_instance_list = []
     vm_info = {
