@@ -56,6 +56,9 @@ if r.ok:
 
     print("========PREPARE========")
     print(r.content)
+
+    while resp['Status']['Result']['Failed'] == None and resp['Status']['Result']['Passed'] == None:
+        sleep(5)
     
     if resp['Status']['Result']['Failed'] != None:
         print(resp['Status']['Result']['Failed'][0]['Message'])

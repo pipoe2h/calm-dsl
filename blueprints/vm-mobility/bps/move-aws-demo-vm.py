@@ -163,8 +163,6 @@ class AwsVmProfile(Profile):
             target=ref(AwsVmService)
         )
 
-        CalmTask.Delay(delay_seconds=60, target=ref(AwsVmService))
-
         CalmTask.Exec.escript(
             filename="scripts/move_prepare_migration_plan.py",
             name="PrepareMigrationPlanTask",
