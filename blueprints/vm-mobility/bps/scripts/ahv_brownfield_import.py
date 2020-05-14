@@ -345,12 +345,8 @@ def ahv_single_vm_run(spec):
 
         if resp.ok:
             json_resp = json.loads(resp.content)
-            if json_resp['metadata']['total_matches'] > 0:
-                nic_list = json_resp['spec']['resources']['nic_list']
-                return nic_list[0]['ip_endpoint_list'][0]['ip']
-            else:
-                print("Could not find account")
-                exit(1)
+            nic_list = json_resp['spec']['resources']['nic_list']
+            return nic_list[0]['ip_endpoint_list'][0]['ip']
         else:
             print("Request failed")
             print("Headers: {}".format(headers))
@@ -439,16 +435,11 @@ def ahv_single_vm_run(spec):
     substrate["create_spec"]["name"] = vm_name
     substrate["create_spec"]["resources"]["account_uuid"] = account_uuid
 
-    # credential_id = updated_spec["spec"]["resources"]["credential_definition_list"][0]["uuid"]
-    # updated_spec["spec"]["resources"]["default_credential_local_reference"]["uuid"] = credential_id
-
     updated_spec["spec"]["resources"]["substrate_definition_list"][0] = substrate
     updated_spec["spec"]["name"] = bp_name
     brownfield_instance_list[0]["instance_name"] = vm_name
     updated_spec["spec"]["resources"]["app_profile_list"][0]["deployment_create_list"][0]["brownfield_instance_list"] = brownfield_instance_list
 
-
-    print(json.dumps(updated_spec))
     ### Create a single vm bp
     resp = create_single_vm_bp(base_url, updated_spec)
 
