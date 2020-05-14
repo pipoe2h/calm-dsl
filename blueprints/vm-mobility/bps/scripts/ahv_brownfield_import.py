@@ -75,7 +75,7 @@ BP_SPEC = {
                                     }
                                 }
                             },
-                            "account_uuid": "33333333-3333-3333-3333-333333333333"
+                            "account_uuid": ""
                         },
                         "categories": {}
                     },
@@ -442,6 +442,7 @@ def ahv_single_vm_run(spec):
     brownfield_instance_list[0]["instance_name"] = vm_name
     updated_spec["spec"]["resources"]["app_profile_list"][0]["deployment_create_list"][0]["brownfield_instance_list"] = brownfield_instance_list
 
+    print(updated_spec)
     ### Create a single vm bp
     resp = create_single_vm_bp(base_url, updated_spec)
 
