@@ -83,6 +83,7 @@ class ControlVM(Service):
     AWS_AMI_ID = Variable.Simple.string('',name='AWS_AMI_ID')
     AWS_SG_ID = Variable.Simple.string('',name='AWS_SG_ID')
     AWS_VPC_ID = Variable.Simple.string('',name='AWS_VPC_ID')
+    AWS_SUBNET_ID = Variable.Simple.string('',name='AWS_SUBNET_ID')
     MOVE_AWS_PROVIDERUUID = Variable.Simple.string('',name='MOVE_AWS_PROVIDERUUID')
     MOVE_AHV_PROVIDERUUID = Variable.Simple.string('',name='MOVE_AHV_PROVIDERUUID')
     MOVE_VAPP_IP = Variable.Simple.string('',name='MOVE_VAPP_IP')

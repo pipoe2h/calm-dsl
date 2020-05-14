@@ -38,6 +38,7 @@ Cred_Move = basic_cred(
 AWS_AMI_ID = os.getenv("CALMDSL_AWS_AMI_ID")
 AWS_REGION = os.getenv("CALMDSL_AWS_REGION")
 AWS_VPC_ID = os.getenv("CALMDSL_AWS_VPC_ID")
+AWS_SUBNET_ID = os.getenv("CALMDSL_AWS_SUBNET_ID")
 AWS_SG_ID = os.getenv("CALMDSL_AWS_SG_ID")
 MOVE_VAPP_IP = os.getenv("CALMDSL_MOVE_VAPP_IP")
 PE_UUID = os.getenv("CALMDSL_PE_UUID")
@@ -46,6 +47,7 @@ AHV_NETWORKUUID = os.getenv("CALMDSL_AHV_NETWORKUUID")
 MOVE_AWS_PROVIDERUUID = os.getenv("CALMDSL_MOVE_AWS_PROVIDERUUID")
 MOVE_AHV_PROVIDERUUID = os.getenv("CALMDSL_MOVE_AHV_PROVIDERUUID")
 CALM_AWS_ACCOUNT = os.getenv("CALMDSL_CALM_AWS_ACCOUNT")
+CALMDSL_AWS_VPC_ID
 
 class AwsVmService(Service):
     """AWS VM"""
@@ -80,6 +82,7 @@ class AwsVmSubstrate(Substrate):
     provider_spec.spec['resources']['image_id'] = AWS_AMI_ID
     provider_spec.spec['resources']['region'] = AWS_REGION
     provider_spec.spec['resources']['vpc_id'] = AWS_VPC_ID
+    provider_spec.spec['resources']['subnet_id'] = AWS_SUBNET_ID
     provider_spec.spec['resources']['security_group_list'] = [
         {"security_group_id": AWS_SG_ID}
     ]

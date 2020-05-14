@@ -27,6 +27,20 @@ vpcs = ec2_client.describe_vpcs(
 
 AWS_VPC = vpcs['Vpcs'][0]['VpcId']
 
+# Get Subnet ID
+subnets = ec2_client.describe_subnets(
+    Filters=[
+        {
+            "Name": "default-for-az",
+            "Values": [
+                'true'
+            ]
+        }
+    ]
+)
+
+AWS_SUBNET = subnets['Subnets'][0]['SubnetId']
+
 # Configure Security Group
 security_groups = ec2_client.describe_security_groups(GroupNames=['NTNX_MOVE_DEMO_CENTOS'])
 
@@ -73,3 +87,4 @@ if "NTNX_MOVE_DEMO_CENTOS" not in json.dumps(security_groups):
 # Set Calm variables
 print("AWS_SG_ID={}".format(security_groups['SecurityGroups'][0]['GroupId']))
 print("AWS_VPC_ID={}".format(AWS_VPC))
+print("AWS_SUBNET_ID={}".format(AWS_SUBNET))
