@@ -22,5 +22,5 @@ resources:
         @@{Cred_OS.username}@@:@@{Cred_OS.secret}@@
       expire: False
     ssh_pwauth: True
-#  subnet_id: subnet-562eab2c
+  subnet_id: subnet-562eab2c
 type: PROVISION_AWS_VM
