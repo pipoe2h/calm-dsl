@@ -4,6 +4,8 @@ vm_name = '@@{name}@@'
 project_name = '@@{calm_project_name}@@'
 ahv_account_name = 'NTNX_LOCAL_AZ'
 ahv_vm_id = '@@{AHV_VM_UUID}@@'
+username = '@@{Cred_OS.username}@@'
+password = '@@{Cred_OS.secret}@@'
 
 
 BP_SPEC = {
@@ -33,12 +35,12 @@ BP_SPEC = {
                 {
                     "name": "Cred_OS",
                     "type": "PASSWORD",
-                    "username": "",
+                    "username": username,
                     "secret": {
                         "attrs": {
                             "is_secret_modified": True
                         },
-                        "value": ""
+                        "value": password
                     },
                     "uuid": "22222222-2222-2222-2222-222222222222"
                 }
