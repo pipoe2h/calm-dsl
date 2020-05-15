@@ -439,7 +439,6 @@ def ahv_single_vm_run(spec):
 
     updated_spec["spec"]["resources"]["substrate_definition_list"][0] = substrate
     updated_spec["spec"]["name"] = bp_name
-    brownfield_instance_list[0]["instance_name"] = vm_name
     updated_spec["spec"]["resources"]["app_profile_list"][0]["deployment_create_list"][0]["brownfield_instance_list"] = brownfield_instance_list
 
     print(updated_spec)
