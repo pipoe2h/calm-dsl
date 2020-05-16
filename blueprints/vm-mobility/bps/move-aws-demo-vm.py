@@ -197,6 +197,12 @@ class AwsVmProfile(Profile):
             target=ref(AwsVmService)
         )
 
+        CalmTask.Exec.escript(
+            filename="scripts/calm_action_stop.py",
+            name="ActionStopTask",
+            target=ref(AwsVmService)
+        )
+
 
 class AwsBlueprint(Blueprint):
     """* [WebApp](http://@@{AwsVmService.address}@@)"""
