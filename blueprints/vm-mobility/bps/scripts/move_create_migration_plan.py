@@ -56,18 +56,19 @@ payload = {
                 "TestNetworkID": ""
             }
         ],
+        "Settings": {
+            "GuestPrepMode": "auto"
+        },
         "Workload": {
             "Type": "VM",
             "VMs": [
                 {
                     "AllowUVMOps": True,
+                    "RetainMacAddress": False,
                     "VMReference": {
                         "UUID": Move_AWS_VmUUID,
                         "VMID": Move_AWS_VmID
-                    },
-                    "GuestPrepMode": "auto",
-                    "RetainMacAddress": False,
-                    "PowerOffForpRDMtovRDMConversion": True
+                    }
                 }
             ]
         }

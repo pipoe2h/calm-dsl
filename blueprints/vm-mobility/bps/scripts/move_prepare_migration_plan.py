@@ -58,7 +58,14 @@ if r.ok:
     print(r.content)
 
     while resp['Status']['Result']['Failed'] == None and resp['Status']['Result']['Passed'] == None:
-        sleep(5)
+        r = urlreq(api_url, verb='POST', params=json.dumps(payload), headers=headers, verify=False)
+        if r.ok:
+            resp = json.loads(r.content)
+            if "InstallationInProgress" in resp['Status']['Result']:
+                print("Agent installation in progress...")
+        else:
+            print("Request failed", r.content)
+            exit(1)
     
     if resp['Status']['Result']['Failed'] != None:
         print(resp['Status']['Result']['Failed'][0]['Message'])
