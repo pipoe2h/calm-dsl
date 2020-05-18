@@ -209,7 +209,7 @@ BP_SPEC = {
             "type": "BROWNFIELD"
         },
         "name": "",
-        "description": "* [WebApp](http://@{}@)".format("@{Linux.address}@")
+        "description": "* [WordPress](http://@{}@)".format("@{Linux.address}@")
     }
 }
 

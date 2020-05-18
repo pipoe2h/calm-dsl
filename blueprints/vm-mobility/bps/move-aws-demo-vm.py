@@ -213,7 +213,7 @@ class AwsVmProfile(Profile):
 
 
 class AwsBlueprint(Blueprint):
-    """* [WebApp](http://@@{AwsVmService.address}@@)"""
+    """* [WordPress](http://@@{AwsVmService.address}@@)"""
 
     credentials = [Cred_OS,Cred_Move]
     services = [AwsVmService]
