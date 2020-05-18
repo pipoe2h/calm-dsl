@@ -19,16 +19,16 @@ images = ec2_client.describe_images(
         {
             "Name": "name",
             "Values": [
-                'Nutanix Move CentOS Demo'
+                'NTNX_MOVE_DEMO_CENTOS'
             ]
         }        
     ]
 )
 
-if "Nutanix Move CentOS Demo" not in json.dumps(images):
+if "NTNX_MOVE_DEMO_CENTOS" not in json.dumps(images):
 
     response = ec2_client.copy_image(
-        Name = "Nutanix Move CentOS Demo",
+        Name = "NTNX_MOVE_DEMO_CENTOS",
         SourceImageId = AWS_SOURCE_AMI,
         SourceRegion = "eu-west-2"
     )
