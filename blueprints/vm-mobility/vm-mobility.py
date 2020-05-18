@@ -69,7 +69,7 @@ AHV_CENTOS_76 = vm_disk_package(
 
 
 class ControlVM(Service):
-    """Control VM for downloading Move """
+    """Control VM for Launching Demo"""
 
     @action
     def __create__():
@@ -108,11 +108,6 @@ class ControlVM_Package(Package):
             filename="scripts/shell/docker_install.sh",
             name="DockerInstallTask"
         )
-
-        # CalmTask.Exec.ssh(
-        #     filename="scripts/shell/dockerCompose_install.sh",
-        #     name="DockerComposeInstallTask"
-        # )
 
         CalmTask.Exec.ssh(
             filename="scripts/shell/dockerHttpd_run.sh",
@@ -172,13 +167,6 @@ class Default(Profile):
         is_hidden=True
     )
 
-    # AWS_REGION = Variable.Simple.string(
-    #     "eu-west-2",
-    #     is_mandatory=True,
-    #     runtime=True,
-    #     name="AWS_REGION"
-    # )
-
     AWS_REGION = Variable.WithOptions.FromTask(
         CalmTask.HTTP.post(
             "https://localhost:9440/api/nutanix/v3/accounts/list",
@@ -198,7 +186,7 @@ class Default(Profile):
     )
 
     AWS_SOURCE_AMI = Variable.Simple.string(
-        "ami-02746e65e84b05139",
+        "ami-06fcfed4cbeecf121",
         is_hidden=True,
         name="AWS_SOURCE_AMI"
     )
@@ -292,6 +280,12 @@ class Default(Profile):
             variables=['AWS_SG_ID'],
             target=ref(ControlVM)
         )        
+
+        CalmTask.Exec.escript(
+            filename="scripts/aws/create_key_pair.py",
+            name="CreateKeyPairTask",
+            target=ref(ControlVM)
+        )  
 
         CalmTask.Exec.ssh(
             filename="scripts/shell/awsVm_deploy.sh",

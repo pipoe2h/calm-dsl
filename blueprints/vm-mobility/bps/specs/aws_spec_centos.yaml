@@ -9,7 +9,7 @@ resources:
       size_gb: 8
       volume_type: GP2
   instance_type: t2.micro
-  key_name: jose.gomez
+  key_name: NTNX_MOVE_DEMO_CENTOS
   security_group_list:
   user_data: |
     #cloud-config

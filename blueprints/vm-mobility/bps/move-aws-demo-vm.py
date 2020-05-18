@@ -49,6 +49,7 @@ MOVE_AHV_PROVIDERUUID = os.getenv("CALMDSL_MOVE_AHV_PROVIDERUUID")
 CALM_AWS_ACCOUNT = os.getenv("CALMDSL_CALM_AWS_ACCOUNT")
 AWS_VPC_ID = os.getenv("CALMDSL_AWS_VPC_ID")
 
+
 class AwsVmService(Service):
     """AWS VM"""
 
@@ -57,20 +58,27 @@ class AwsVmService(Service):
     MOVE_PLANUUID = Variable.Simple.string('',name='MOVE_PLANUUID')
     AHV_VM_UUID = Variable.Simple.string('',name='AHV_VM_UUID')
 
+
 class AwsVmPackage(Package):
 
     services = [ref(AwsVmService)]
 
     @action
     def __install__():
+
         CalmTask.Exec.ssh(
-            filename="scripts/centos_install_httpd.sh",
-            name="CentosInstallTask"
+            filename="../scripts/shell/docker_install.sh",
+            name="DockerInstallTask"
         )
 
         CalmTask.Exec.ssh(
-            filename="scripts/centos_move_prepare.sh",
-            name="MovePrepareTask"
+            filename="../scripts/shell/dockerCompose_install.sh",
+            name="DockerComposeInstallTask"
+        )
+
+        CalmTask.Exec.ssh(
+            filename="scripts/docker_compose_wordpress.sh",
+            name="DockerComposeWordpressTask"
         )
 
 
@@ -82,7 +90,7 @@ class AwsVmSubstrate(Substrate):
     provider_spec.spec['resources']['image_id'] = AWS_AMI_ID
     provider_spec.spec['resources']['region'] = AWS_REGION
     provider_spec.spec['resources']['vpc_id'] = AWS_VPC_ID
-    provider_spec.spec['resources']['subnet_id'] = 'subnet-4e314927'
+    provider_spec.spec['resources']['subnet_id'] = AWS_SUBNET_ID
     provider_spec.spec['resources']['security_group_list'] = [
         {"security_group_id": AWS_SG_ID}
     ]
