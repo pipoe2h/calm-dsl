@@ -55,7 +55,7 @@ if r.ok:
     resp = json.loads(r.content)
 
     print("========PREPARE========")
-    print(r.content)
+    # print(r.content)
 
     while resp['Status']['Result']['Failed'] == None and resp['Status']['Result']['Passed'] == None:
         r = urlreq(api_url, verb='POST', params=json.dumps(payload), headers=headers, verify=False)
@@ -86,7 +86,7 @@ if r.ok:
     resp = json.loads(r.content)
 
     print("========READINESS========")
-    print(r.content)
+    # print(r.content)
     
     if resp['Status']['Failed'] != None or resp['Status']['VMChecksResult']['Failed'] != None:
         print(resp['Status']['Failed'])

@@ -29,12 +29,12 @@ r = urlreq(api_url, verb='POST', headers=headers, verify=False)
 if r.ok:
     resp = json.loads(r.content)
 
-    # print("========MONITOR========")
+    print("========MONITOR========")
     # print(r.content)
     
     while "Progress" not in resp['Status']['VMStatus'][0]:
 
-        # print("========PROGRESS========")
+        print("========PROGRESS========")
         # print(r.content)
 
         if "DELETE" in resp['Status']['Actions'][0]:
@@ -67,7 +67,7 @@ if r.ok:
 
     while "CUTOVER" not in resp['Status']['VMStatus'][0]['Actions']:
 
-        # print("========CUTOVER========")
+        print("========READY FOR CUTOVER========")
         # print(r.content)
 
         r = urlreq(api_url, verb='POST', headers=headers, verify=False)

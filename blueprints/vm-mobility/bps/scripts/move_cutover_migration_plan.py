@@ -48,7 +48,7 @@ if r.ok:
     resp = json.loads(r.content)
 
     print("========CUTOVER========")
-    print(r.content)
+    # print(r.content)
     
     while "DELETE" not in resp['Status']['Actions']:
         r = urlreq(api_url, verb='POST', headers=headers, verify=False)
