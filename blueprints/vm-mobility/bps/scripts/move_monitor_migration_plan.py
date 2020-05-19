@@ -34,7 +34,7 @@ if r.ok:
     
     while "Progress" not in resp['Status']['VMStatus'][0]:
 
-        print("========PROGRESS========")
+        # print("========PROGRESS========")
         # print(r.content)
 
         if "DELETE" in resp['Status']['Actions'][0]:
