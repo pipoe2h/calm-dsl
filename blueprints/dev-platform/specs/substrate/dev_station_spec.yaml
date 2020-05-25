@@ -1,0 +1,66 @@
+resources:
+    disk_list:
+    - data_source_reference:
+        kind: image
+      disk_size_mib: 0
+      device_properties:
+        device_type: DISK
+        disk_address:
+          adapter_type: SCSI
+          device_index: 0
+    - device_properties:
+        device_type: DISK
+        disk_address:
+          adapter_type: SCSI
+          device_index: 1
+      disk_size_mib: 25600
+    memory_size_mib: 8192
+    num_sockets: 2
+    num_vcpus_per_socket: 2
+    boot_config:
+      boot_device:
+        disk_address:
+          adapter_type: SCSI
+          device_index: 0
+    serial_port_list:
+    - is_connected: false
+    guest_customization:
+      cloud_init:
+        user_data: |-
+          #cloud-config
+          hostname: @@{name}@@
+          users:
+          #  - name: @@{Cred_OS.username}@@
+          #    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+            - default
+            - name: @@{DEVELOPER_USERNAME}@@
+              shell: /bin/bash
+              ssh_authorized_keys:
+                - @@{DEVELOPER_PUB_KEY}@@
+          chpasswd:
+            list: |
+              @@{Cred_OS.username}@@:@@{Cred_OS.secret}@@
+            expire: False
+          ssh_pwauth: True
+          disk_setup:
+            /dev/sdb:
+              table_type: gpt
+              layout: True
+              overwrite: True
+          fs_setup:
+            - label: data_disk
+              filesystem: ext4
+              device: /dev/sdb1
+              cmd: mkfs.ext4 -t %(filesystem)s -L %(label)s %(device)s
+          mounts:
+            - [ /dev/sdb1, /home/@@{DEVELOPER_USERNAME}@@/data_disk, auto, "defaults,noexec,nofail" ]
+          runcmd:
+            - [ sh, -c, cp /etc/skel/.* /home/@@{DEVELOPER_USERNAME}@@ ]
+            - [ chown, -R, '@@{DEVELOPER_USERNAME}@@:@@{DEVELOPER_USERNAME}@@', /home/@@{DEVELOPER_USERNAME}@@ ]
+    nic_list:
+    - network_function_nic_type: INGRESS
+      nic_type: NORMAL_NIC
+      subnet_reference:
+        kind: subnet
+        name: dnd-jose.gomez
+        uuid: e28bce98-3eef-4be7-8df9-bf9726dccba2

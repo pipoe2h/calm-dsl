@@ -1,0 +1,9 @@
+image:
+    name: AHV_UBUNTU_20_04
+    type: DISK_IMAGE
+    source: https://cloud-images.ubuntu.com/focal/current/focal-server-cloudimg-amd64.img 
+    architecture: X86_64
+    
+product:
+    name: AHV_UBUNTU
+    version: 20.04
