@@ -1,0 +1,718 @@
+{
+    "spec": {
+        "name": "Sap_Control_Centre",
+        "description": "* [Repo](http://@@{ControlVM.address}@@:8082/ui)",
+        "resources": {
+            "type": "USER",
+            "service_definition_list": [
+                {
+                    "name": "ControlVM",
+                    "description": "Control Centre VM for managing SAP",
+                    "port_list": [],
+                    "singleton": false,
+                    "tier": "",
+                    "depends_on_list": [],
+                    "variable_list": [],
+                    "action_list": [
+                        {
+                            "name": "Patch_Image",
+                            "description": "",
+                            "type": "user",
+                            "critical": false,
+                            "runbook": {
+                                "name": "ControlVM_Patch_Image_runbook",
+                                "description": "",
+                                "main_task_local_reference": {
+                                    "kind": "app_task",
+                                    "name": "ControlVM_Patch_Image_dag"
+                                },
+                                "task_definition_list": [
+                                    {
+                                        "name": "ControlVM_Patch_Image_dag",
+                                        "description": "",
+                                        "type": "DAG",
+                                        "target_any_local_reference": {
+                                            "kind": "app_service",
+                                            "name": "ControlVM"
+                                        },
+                                        "attrs": {
+                                            "edges": []
+                                        },
+                                        "child_tasks_local_reference_list": [
+                                            {
+                                                "kind": "app_task",
+                                                "name": "PatchImage"
+                                            }
+                                        ],
+                                        "variable_list": []
+                                    },
+                                    {
+                                        "name": "PatchImage",
+                                        "description": "",
+                                        "type": "EXEC",
+                                        "target_any_local_reference": {
+                                            "kind": "app_service",
+                                            "name": "ControlVM"
+                                        },
+                                        "attrs": {
+                                            "script_type": "sh",
+                                            "script": "export ISO_MOUNT_DIR=/mnt/iso\nexport IMG_TEMP_DIR=/data_disk\nexport IMG_CALM_DIR=$IMG_TEMP_DIR/calm_iso\nexport IMG_URL=@@{IMG_URL}@@\nexport IMG_URI=${IMG_URL##*/}\nexport IMG_NAME=$(echo \"$IMG_URI\" | cut -f 1 -d '.')\nexport ARTIFACTORY_USERNAME=admin\nexport ARTIFACTORY_PASSWORD=@@{ARTIFACTORY_PASSWORD}@@\nexport CALM_REPO=http://@@{address}@@:8082/artifactory/calm-isos\n \n\nsudo wget $IMG_URL -O $IMG_TEMP_DIR/$IMG_URI\nsudo mount -o loop $IMG_TEMP_DIR/$IMG_URI $ISO_MOUNT_DIR\nsudo mkdir -p $IMG_CALM_DIR\nsudo cp -R /mnt/iso/* $IMG_CALM_DIR/\nsudo umount $ISO_MOUNT_DIR\n\n# Change isolinux.cfg to auto start installation\nsudo mv $IMG_CALM_DIR/boot/x86_64/loader/isolinux.cfg $IMG_CALM_DIR/boot/x86_64/loader/isolinux.cfg.bak\n\necho \"\ndefault Autoinstallation\n\n# autoyast\nlabel Autoinstallation\n  kernel linux\n  append initrd=initrd splash=silent instmode=cd ifcfg=eth0=dhcp autoyast=http://@@{address}@@:8082/artifactory/autoyast-profiles/ showopts\n\nimplicit\t1\nprompt\t\t1\ntimeout\t\t30\n\" | sudo tee $IMG_CALM_DIR/boot/x86_64/loader/isolinux.cfg\n\n\nsudo cd $IMG_TEMP_DIR/\nsudo mkisofs -o $IMG_TEMP_DIR/$IMG_NAME-CALM.iso -udf -f -r -gui -graft-points -b boot/x86_64/loader/isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -no-emul-boot -V SLE12SP3SAPCALM $IMG_CALM_DIR/\nsudo curl -u $ARTIFACTORY_USERNAME:$ARTIFACTORY_PASSWORD \\\n    -X PUT \\\n    -T $IMG_TEMP_DIR/$IMG_NAME-CALM.iso \\\n    $CALM_REPO/$IMG_NAME-CALM.iso\n    \nsudo cd /\nsudo rm -fR $IMG_TEMP_DIR/$IMG_CALM_DIR\nsudo rm -fR $IMG_TEMP_DIR/$IMG_NAME*\n"
+                                        },
+                                        "child_tasks_local_reference_list": [],
+                                        "variable_list": []
+                                    }
+                                ],
+                                "variable_list": [
+                                    {
+                                        "name": "IMG_URL",
+                                        "description": "",
+                                        "type": "LOCAL",
+                                        "label": "",
+                                        "attrs": {},
+                                        "val_type": "STRING",
+                                        "value": "",
+                                        "data_type": "BASE",
+                                        "is_hidden": false,
+                                        "is_mandatory": false
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "action_create",
+                            "description": "",
+                            "type": "system",
+                            "critical": true,
+                            "runbook": {
+                                "name": "Runbook_for_Service_ControlVM_action_create",
+                                "description": "",
+                                "main_task_local_reference": {
+                                    "kind": "app_task",
+                                    "name": "DAG_Task_for_Service_ControlVM_action_create"
+                                },
+                                "task_definition_list": [
+                                    {
+                                        "name": "DAG_Task_for_Service_ControlVM_action_create",
+                                        "description": "",
+                                        "type": "DAG",
+                                        "target_any_local_reference": {
+                                            "kind": "app_service",
+                                            "name": "ControlVM"
+                                        },
+                                        "attrs": {
+                                            "edges": []
+                                        },
+                                        "child_tasks_local_reference_list": [],
+                                        "variable_list": []
+                                    }
+                                ],
+                                "variable_list": []
+                            }
+                        },
+                        {
+                            "name": "action_delete",
+                            "description": "",
+                            "type": "system",
+                            "critical": true,
+                            "runbook": {
+                                "name": "Runbook_for_Service_ControlVM_action_delete",
+                                "description": "",
+                                "main_task_local_reference": {
+                                    "kind": "app_task",
+                                    "name": "DAG_Task_for_Service_ControlVM_action_delete"
+                                },
+                                "task_definition_list": [
+                                    {
+                                        "name": "DAG_Task_for_Service_ControlVM_action_delete",
+                                        "description": "",
+                                        "type": "DAG",
+                                        "target_any_local_reference": {
+                                            "kind": "app_service",
+                                            "name": "ControlVM"
+                                        },
+                                        "attrs": {
+                                            "edges": []
+                                        },
+                                        "child_tasks_local_reference_list": [],
+                                        "variable_list": []
+                                    }
+                                ],
+                                "variable_list": []
+                            }
+                        },
+                        {
+                            "name": "action_start",
+                            "description": "",
+                            "type": "system",
+                            "critical": true,
+                            "runbook": {
+                                "name": "Runbook_for_Service_ControlVM_action_start",
+                                "description": "",
+                                "main_task_local_reference": {
+                                    "kind": "app_task",
+                                    "name": "DAG_Task_for_Service_ControlVM_action_start"
+                                },
+                                "task_definition_list": [
+                                    {
+                                        "name": "DAG_Task_for_Service_ControlVM_action_start",
+                                        "description": "",
+                                        "type": "DAG",
+                                        "target_any_local_reference": {
+                                            "kind": "app_service",
+                                            "name": "ControlVM"
+                                        },
+                                        "attrs": {
+                                            "edges": []
+                                        },
+                                        "child_tasks_local_reference_list": [],
+                                        "variable_list": []
+                                    }
+                                ],
+                                "variable_list": []
+                            }
+                        },
+                        {
+                            "name": "action_stop",
+                            "description": "",
+                            "type": "system",
+                            "critical": true,
+                            "runbook": {
+                                "name": "Runbook_for_Service_ControlVM_action_stop",
+                                "description": "",
+                                "main_task_local_reference": {
+                                    "kind": "app_task",
+                                    "name": "DAG_Task_for_Service_ControlVM_action_stop"
+                                },
+                                "task_definition_list": [
+                                    {
+                                        "name": "DAG_Task_for_Service_ControlVM_action_stop",
+                                        "description": "",
+                                        "type": "DAG",
+                                        "target_any_local_reference": {
+                                            "kind": "app_service",
+                                            "name": "ControlVM"
+                                        },
+                                        "attrs": {
+                                            "edges": []
+                                        },
+                                        "child_tasks_local_reference_list": [],
+                                        "variable_list": []
+                                    }
+                                ],
+                                "variable_list": []
+                            }
+                        },
+                        {
+                            "name": "action_restart",
+                            "description": "",
+                            "type": "system",
+                            "critical": true,
+                            "runbook": {
+                                "name": "Runbook_for_Service_ControlVM_action_restart",
+                                "description": "",
+                                "main_task_local_reference": {
+                                    "kind": "app_task",
+                                    "name": "DAG_Task_for_Service_ControlVM_action_restart"
+                                },
+                                "task_definition_list": [
+                                    {
+                                        "name": "DAG_Task_for_Service_ControlVM_action_restart",
+                                        "description": "",
+                                        "type": "DAG",
+                                        "target_any_local_reference": {
+                                            "kind": "app_service",
+                                            "name": "ControlVM"
+                                        },
+                                        "attrs": {
+                                            "edges": []
+                                        },
+                                        "child_tasks_local_reference_list": [],
+                                        "variable_list": []
+                                    }
+                                ],
+                                "variable_list": []
+                            }
+                        },
+                        {
+                            "name": "action_soft_delete",
+                            "description": "",
+                            "type": "system",
+                            "critical": true,
+                            "runbook": {
+                                "name": "Runbook_for_Service_ControlVM_action_soft_delete",
+                                "description": "",
+                                "main_task_local_reference": {
+                                    "kind": "app_task",
+                                    "name": "DAG_Task_for_Service_ControlVM_action_soft_delete"
+                                },
+                                "task_definition_list": [
+                                    {
+                                        "name": "DAG_Task_for_Service_ControlVM_action_soft_delete",
+                                        "description": "",
+                                        "type": "DAG",
+                                        "target_any_local_reference": {
+                                            "kind": "app_service",
+                                            "name": "ControlVM"
+                                        },
+                                        "attrs": {
+                                            "edges": []
+                                        },
+                                        "child_tasks_local_reference_list": [],
+                                        "variable_list": []
+                                    }
+                                ],
+                                "variable_list": []
+                            }
+                        }
+                    ],
+                    "container_spec": {}
+                }
+            ],
+            "package_definition_list": [
+                {
+                    "name": "ControlVM_Package",
+                    "description": "",
+                    "type": "CUSTOM",
+                    "options": {
+                        "install_runbook": {
+                            "name": "ControlVM_Package___install___runbook",
+                            "description": "",
+                            "main_task_local_reference": {
+                                "kind": "app_task",
+                                "name": "ControlVM_Package___install___dag"
+                            },
+                            "task_definition_list": [
+                                {
+                                    "name": "ControlVM_Package___install___dag",
+                                    "description": "",
+                                    "type": "DAG",
+                                    "target_any_local_reference": {
+                                        "kind": "app_service",
+                                        "name": "ControlVM"
+                                    },
+                                    "attrs": {
+                                        "edges": [
+                                            {
+                                                "from_task_reference": {
+                                                    "kind": "app_task",
+                                                    "name": "Dependencies"
+                                                },
+                                                "to_task_reference": {
+                                                    "kind": "app_task",
+                                                    "name": "DockerInstall"
+                                                }
+                                            },
+                                            {
+                                                "from_task_reference": {
+                                                    "kind": "app_task",
+                                                    "name": "DockerInstall"
+                                                },
+                                                "to_task_reference": {
+                                                    "kind": "app_task",
+                                                    "name": "DockerArtifactoryInstall"
+                                                }
+                                            },
+                                            {
+                                                "from_task_reference": {
+                                                    "kind": "app_task",
+                                                    "name": "DockerArtifactoryInstall"
+                                                },
+                                                "to_task_reference": {
+                                                    "kind": "app_task",
+                                                    "name": "_Task68097748"
+                                                }
+                                            },
+                                            {
+                                                "from_task_reference": {
+                                                    "kind": "app_task",
+                                                    "name": "_Task68097748"
+                                                },
+                                                "to_task_reference": {
+                                                    "kind": "app_task",
+                                                    "name": "ArtifactoryInitialSetup"
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "child_tasks_local_reference_list": [
+                                        {
+                                            "kind": "app_task",
+                                            "name": "Dependencies"
+                                        },
+                                        {
+                                            "kind": "app_task",
+                                            "name": "DockerInstall"
+                                        },
+                                        {
+                                            "kind": "app_task",
+                                            "name": "DockerArtifactoryInstall"
+                                        },
+                                        {
+                                            "kind": "app_task",
+                                            "name": "_Task68097748"
+                                        },
+                                        {
+                                            "kind": "app_task",
+                                            "name": "ArtifactoryInitialSetup"
+                                        }
+                                    ],
+                                    "variable_list": []
+                                },
+                                {
+                                    "name": "Dependencies",
+                                    "description": "",
+                                    "type": "EXEC",
+                                    "target_any_local_reference": {
+                                        "kind": "app_service",
+                                        "name": "ControlVM"
+                                    },
+                                    "attrs": {
+                                        "script_type": "sh",
+                                        "script": "sudo yum install -y mkisofs wget lvm2 syslinux\nsudo mkdir -p /mnt/iso\n"
+                                    },
+                                    "child_tasks_local_reference_list": [],
+                                    "variable_list": []
+                                },
+                                {
+                                    "name": "DockerInstall",
+                                    "description": "",
+                                    "type": "EXEC",
+                                    "target_any_local_reference": {
+                                        "kind": "app_service",
+                                        "name": "ControlVM"
+                                    },
+                                    "attrs": {
+                                        "script_type": "sh",
+                                        "script": "# Uninstall old versions\nsudo yum remove -y docker \\\n    docker-client \\\n    docker-client-latest \\\n    docker-common \\\n    docker-latest \\\n    docker-latest-logrotate \\\n    docker-logrotate \\\n    docker-engine\n\n# Set up the repository\nsudo yum install -y yum-utils\nsudo yum-config-manager \\\n    --add-repo \\\n    https://download.docker.com/linux/centos/docker-ce.repo\n\n# Install the latest version of Docker Engine\nsudo yum install -y docker-ce docker-ce-cli containerd.io\n\n# Enable and start Docker\nsudo systemctl enable docker\nsudo systemctl start docker\n\n# Add current user to Docker\nsudo usermod -aG docker $USER"
+                                    },
+                                    "child_tasks_local_reference_list": [],
+                                    "variable_list": []
+                                },
+                                {
+                                    "name": "DockerArtifactoryInstall",
+                                    "description": "",
+                                    "type": "EXEC",
+                                    "target_any_local_reference": {
+                                        "kind": "app_service",
+                                        "name": "ControlVM"
+                                    },
+                                    "attrs": {
+                                        "script_type": "sh",
+                                        "script": "export DATA_DIR=/data_disk\nexport JFROG_HOME=$DATA_DIR/services/jfrog\n\n# Create your Artifactory home directory and an empty system.yaml file.\nsudo mkdir -p $JFROG_HOME/artifactory/var/etc/\ncd $JFROG_HOME/artifactory/var/etc/\nsudo touch ./system.yaml\nsudo chown -R 1030:1030 $JFROG_HOME/artifactory/var\n\n# Start the Artifactory container\ndocker run --name artifactory --restart always -v $JFROG_HOME/artifactory/var/:/var/opt/jfrog/artifactory -d -p 8081:8081 -p 8082:8082 docker.bintray.io/jfrog/artifactory-oss:latest\n"
+                                    },
+                                    "child_tasks_local_reference_list": [],
+                                    "variable_list": []
+                                },
+                                {
+                                    "name": "_Task68097748",
+                                    "description": "",
+                                    "type": "DELAY",
+                                    "target_any_local_reference": {
+                                        "kind": "app_service",
+                                        "name": "ControlVM"
+                                    },
+                                    "attrs": {
+                                        "interval_secs": 90
+                                    },
+                                    "child_tasks_local_reference_list": [],
+                                    "variable_list": []
+                                },
+                                {
+                                    "name": "ArtifactoryInitialSetup",
+                                    "description": "",
+                                    "type": "EXEC",
+                                    "target_any_local_reference": {
+                                        "kind": "app_service",
+                                        "name": "ControlVM"
+                                    },
+                                    "attrs": {
+                                        "script_type": "static",
+                                        "script": "artifactory_new_password = '@@{ARTIFACTORY_PASSWORD}@@'\n\n# Authenticate and store cookies\napi_url = 'http://@@{address}@@:8082/ui/api/v1/ui/auth/login?_spring_security_remember_me=false'\nheaders = {'Content-Type': 'application/json', 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest'}\n\npayload = {\"user\":\"admin\",\"password\":\"password\",\"type\":\"login\"}\n\nr = urlreq(api_url, verb='POST', params=json.dumps(payload), headers=headers, verify=False)\nif r.ok:\n    cookies = r.cookies.get_dict()\n    accesstoken = cookies['ACCESSTOKEN']\n    refreshtoken = cookies['REFRESHTOKEN']\n\nelse:\n    print(\"Post request failed\", r.content)\n    exit(1)\n\n# Change default password    \napi_url = 'http://@@{address}@@:8082/ui/api/v1/ui/onboarding/changePassword'\ncookies = {'ACCESSTOKEN': accesstoken, 'REFRESHTOKEN': refreshtoken}\nheaders = {'Content-Type': 'application/json', 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest'}\n\npayload = {\"userName\":\"admin\",\"oldPassword\":\"password\",\"newPassword1\":artifactory_new_password,\"newPassword2\":artifactory_new_password}\n\nr = urlreq(api_url, verb='POST', params=json.dumps(payload), headers=headers, cookies=cookies, verify=False)\nif r.ok:\n    resp = json.loads(r.content)\n    print(resp)\n\nelse:\n    print(\"Post request failed\", r.content)\n    exit(1)\n\n# Delete default local repo\napi_url = 'http://@@{address}@@:8082/ui/api/v1/ui/admin/repositories/example-repo-local/delete?type=local'\n\nr = urlreq(api_url, verb='DELETE', headers=headers, cookies=cookies, verify=False)\nif r.ok:\n    resp = json.loads(r.content)\n    print(resp)\n\nelse:\n    print(\"Post request failed\", r.content)\n    exit(1)\n\n# Allow anonymous access\napi_url = 'http://@@{address}@@:8082/ui/api/v1/ui/securityconfig'\n\nr = urlreq(api_url, verb='GET', headers=headers, cookies=cookies, verify=False)\nif r.ok:\n    resp = json.loads(r.content)\n\n    resp['anonAccessEnabled'] = True\n\n    r = urlreq(api_url, verb='PUT', params=json.dumps(resp), headers=headers, cookies=cookies, verify=False)\n    if r.ok:\n        resp = json.loads(r.content)\n        print(resp)\n\n    else:\n        print(\"Post request failed\", r.content)\n        exit(1)\nelse:\n    print(\"Post request failed\", r.content)\n    exit(1)\n\n# Set filesize max to 5GB\napi_url = 'http://@@{address}@@:8082/ui/api/v1/ui/generalConfig'\n\nr = urlreq(api_url, verb='GET', headers=headers, cookies=cookies, verify=False)\nif r.ok:\n    resp = json.loads(r.content)\n\n    resp['fileUploadMaxSize'] = 5000\n\n    r = urlreq(api_url, verb='PUT', params=json.dumps(resp), headers=headers, cookies=cookies, verify=False)\n    if r.ok:\n        resp = json.loads(r.content)\n        print(resp)\n\n    else:\n        print(\"Post request failed\", r.content)\n        exit(1)\n\nelse:\n    print(\"Post request failed\", r.content)\n    exit(1)\n\n# Create Official ISOs repo\napi_url = 'http://@@{address}@@:8082/ui/api/v1/ui/admin/repositories'\n\npayload = {\n    \"type\": \"localRepoConfig\",\n    \"typeSpecific\": {\n        \"localChecksumPolicy\": \"CLIENT\",\n        \"repoType\": \"Generic\",\n        \"icon\": \"generic\",\n        \"text\": \"Generic\",\n        \"listRemoteFolderItems\": True,\n        \"url\": \"\"\n    },\n    \"advanced\": {\n        \"cache\": {\n            \"keepUnusedArtifactsHours\": \"\",\n            \"retrievalCachePeriodSecs\": 7200,\n            \"assumedOfflineLimitSecs\": 300,\n            \"missedRetrievalCachePeriodSecs\": 1800\n        },\n        \"network\": {\n            \"socketTimeout\": 15000,\n            \"syncProperties\": False,\n            \"lenientHostAuth\": False,\n            \"cookieManagement\": False\n        },\n        \"blackedOut\": False,\n        \"allowContentBrowsing\": False\n    },\n    \"basic\": {\n        \"includesPattern\": \"**/*\",\n        \"includesPatternArray\": [\n            \"**/*\"\n        ],\n        \"excludesPatternArray\": [],\n        \"layout\": \"simple-default\"\n    },\n    \"general\": {\n        \"repoKey\": \"official-isos\"\n    }\n}\n\nr = urlreq(api_url, verb='POST', params=json.dumps(payload), headers=headers, cookies=cookies, verify=False)\nif r.ok:\n    resp = json.loads(r.content)\n    print(resp)\n\nelse:\n    print(\"Post request failed\", r.content)\n    exit(1)\n\n# Create Calm ISOs repo\npayload['general']['repoKey'] = \"calm-isos\"\n\nr = urlreq(api_url, verb='POST', params=json.dumps(payload), headers=headers, cookies=cookies, verify=False)\nif r.ok:\n    resp = json.loads(r.content)\n    print(resp)\n\nelse:\n    print(\"Post request failed\", r.content)\n    exit(1)\n\n# Create AutoYast Profiles repo\npayload['general']['repoKey'] = \"autoyast-profiles\"\n\nr = urlreq(api_url, verb='POST', params=json.dumps(payload), headers=headers, cookies=cookies, verify=False)\nif r.ok:\n    resp = json.loads(r.content)\n    print(resp)\n\nelse:\n    print(\"Post request failed\", r.content)\n    exit(1)"
+                                    },
+                                    "child_tasks_local_reference_list": [],
+                                    "variable_list": []
+                                }
+                            ],
+                            "variable_list": []
+                        },
+                        "uninstall_runbook": {
+                            "name": "Runbook_for_Package_ControlVM_Package_action_uninstall",
+                            "description": "",
+                            "main_task_local_reference": {
+                                "kind": "app_task",
+                                "name": "DAG_Task_for_Package_ControlVM_Package_action_uninstall"
+                            },
+                            "task_definition_list": [
+                                {
+                                    "name": "DAG_Task_for_Package_ControlVM_Package_action_uninstall",
+                                    "description": "",
+                                    "type": "DAG",
+                                    "target_any_local_reference": {
+                                        "kind": "app_service",
+                                        "name": "ControlVM"
+                                    },
+                                    "attrs": {
+                                        "edges": []
+                                    },
+                                    "child_tasks_local_reference_list": [],
+                                    "variable_list": []
+                                }
+                            ],
+                            "variable_list": []
+                        }
+                    },
+                    "service_local_reference_list": [
+                        {
+                            "kind": "app_service",
+                            "name": "ControlVM"
+                        }
+                    ],
+                    "variable_list": [],
+                    "version": ""
+                },
+                {
+                    "name": "AHV_CENTOS_76",
+                    "description": "",
+                    "type": "SUBSTRATE_IMAGE",
+                    "options": {
+                        "name": "AHV_CENTOS_76",
+                        "description": "",
+                        "resources": {
+                            "image_type": "DISK_IMAGE",
+                            "source_uri": "https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2",
+                            "architecture": "X86_64",
+                            "version": {
+                                "product_version": "1.0",
+                                "product_name": "AHV_CENTOS_76"
+                            },
+                            "checksum": {}
+                        }
+                    },
+                    "service_local_reference_list": [],
+                    "variable_list": [],
+                    "version": ""
+                }
+            ],
+            "published_service_definition_list": [],
+            "substrate_definition_list": [
+                {
+                    "name": "ControlVM_Substrate",
+                    "description": "",
+                    "type": "AHV_VM",
+                    "os_type": "Linux",
+                    "create_spec": {
+                        "resources": {
+                            "disk_list": [
+                                {
+                                    "data_source_reference": {
+                                        "kind": "app_package",
+                                        "name": "AHV_CENTOS_76"
+                                    },
+                                    "disk_size_mib": 0,
+                                    "device_properties": {
+                                        "device_type": "DISK",
+                                        "disk_address": {
+                                            "adapter_type": "SCSI",
+                                            "device_index": 0
+                                        }
+                                    }
+                                },
+                                {
+                                    "device_properties": {
+                                        "device_type": "DISK",
+                                        "disk_address": {
+                                            "adapter_type": "SCSI",
+                                            "device_index": 1
+                                        }
+                                    },
+                                    "disk_size_mib": 102400
+                                }
+                            ],
+                            "memory_size_mib": 4096,
+                            "num_sockets": 2,
+                            "num_vcpus_per_socket": 1,
+                            "boot_config": {
+                                "boot_device": {
+                                    "disk_address": {
+                                        "adapter_type": "SCSI",
+                                        "device_index": 0
+                                    }
+                                }
+                            },
+                            "guest_customization": {
+                                "cloud_init": {
+                                    "user_data": "#cloud-config\nhostname: @@{name}@@\nusers:\n  - name: @@{Cred_OS.username}@@\n    sudo: ['ALL=(ALL) NOPASSWD:ALL']\nchpasswd:\n  list: |\n    @@{Cred_OS.username}@@:@@{Cred_OS.secret}@@\n  expire: False\nssh_pwauth: True\ndisk_setup:\n  /dev/sdb:\n    table_type: mbr\n    layout: True\n    overwrite: True\nfs_setup:\n  - label: data_disk\n    filesystem: ext4\n    device: /dev/sdb1\n    cmd: mkfs.ext4 -t %(filesystem)s -L %(label)s %(device)s\nmounts:\n  - [ /dev/sdb1, /data_disk, auto, \"defaults,noexec,nofail\" ]"
+                                }
+                            },
+                            "nic_list": [
+                                {
+                                    "network_function_nic_type": "INGRESS",
+                                    "nic_type": "NORMAL_NIC",
+                                    "subnet_reference": {
+                                        "kind": "subnet",
+                                        "name": "dnd-jose.gomez",
+                                        "uuid": "e28bce98-3eef-4be7-8df9-bf9726dccba2"
+                                    }
+                                }
+                            ]
+                        },
+                        "name": "sap-control-centre-@@{calm_random}@@"
+                    },
+                    "variable_list": [],
+                    "action_list": [],
+                    "readiness_probe": {
+                        "connection_type": "SSH",
+                        "connection_port": 22,
+                        "connection_protocol": "",
+                        "login_credential_local_reference": {
+                            "kind": "app_credential",
+                            "name": "Cred_OS"
+                        },
+                        "timeout_secs": "",
+                        "delay_secs": "60",
+                        "retries": "5",
+                        "address": "@@{platform.status.resources.nic_list[0].ip_endpoint_list[0].ip}@@",
+                        "disable_readiness_probe": false
+                    }
+                }
+            ],
+            "credential_definition_list": [
+                {
+                    "name": "Cred_OS",
+                    "description": "",
+                    "type": "PASSWORD",
+                    "username": "nutanix",
+                    "secret": {
+                        "attrs": {
+                            "is_secret_modified": true
+                        },
+                        "value": "nutanix/4u"
+                    },
+                    "default": true
+                }
+            ],
+            "app_profile_list": [
+                {
+                    "name": "Default",
+                    "deployment_create_list": [
+                        {
+                            "published_service_local_reference_list": [],
+                            "package_local_reference_list": [
+                                {
+                                    "kind": "app_package",
+                                    "name": "ControlVM_Package"
+                                }
+                            ],
+                            "substrate_local_reference": {
+                                "kind": "app_substrate",
+                                "name": "ControlVM_Substrate"
+                            },
+                            "depends_on_list": [],
+                            "min_replicas": "1",
+                            "max_replicas": "1",
+                            "type": "GREENFIELD",
+                            "name": "ControlVM_Deployment",
+                            "options": {}
+                        }
+                    ],
+                    "variable_list": [
+                        {
+                            "name": "ARTIFACTORY_PASSWORD",
+                            "description": "",
+                            "type": "SECRET",
+                            "label": "Password for Image Repository",
+                            "attrs": {},
+                            "val_type": "STRING",
+                            "value": "nutanix/4u",
+                            "data_type": "BASE",
+                            "editables": {
+                                "value": true
+                            },
+                            "is_hidden": false,
+                            "is_mandatory": true
+                        }
+                    ],
+                    "action_list": [
+                        {
+                            "name": "Patch_Image",
+                            "description": "",
+                            "type": "user",
+                            "critical": false,
+                            "runbook": {
+                                "name": "Default_Patch_Image_runbook",
+                                "description": "",
+                                "main_task_local_reference": {
+                                    "kind": "app_task",
+                                    "name": "Default_Patch_Image_dag"
+                                },
+                                "task_definition_list": [
+                                    {
+                                        "name": "Default_Patch_Image_dag",
+                                        "description": "",
+                                        "type": "DAG",
+                                        "attrs": {
+                                            "edges": []
+                                        },
+                                        "child_tasks_local_reference_list": [
+                                            {
+                                                "kind": "app_task",
+                                                "name": "PatchImage"
+                                            }
+                                        ],
+                                        "variable_list": []
+                                    },
+                                    {
+                                        "name": "PatchImage",
+                                        "description": "",
+                                        "type": "CALL_RUNBOOK",
+                                        "target_any_local_reference": {
+                                            "kind": "app_service",
+                                            "name": "ControlVM"
+                                        },
+                                        "attrs": {
+                                            "runbook_reference": {
+                                                "kind": "app_runbook",
+                                                "name": "ControlVM_Patch_Image_runbook"
+                                            }
+                                        },
+                                        "child_tasks_local_reference_list": [],
+                                        "variable_list": []
+                                    }
+                                ],
+                                "variable_list": [
+                                    {
+                                        "name": "IMG_URL",
+                                        "description": "",
+                                        "type": "LOCAL",
+                                        "label": "Provide the ISO link",
+                                        "attrs": {},
+                                        "val_type": "STRING",
+                                        "value": "",
+                                        "data_type": "BASE",
+                                        "editables": {
+                                            "value": true
+                                        },
+                                        "is_hidden": false,
+                                        "is_mandatory": true
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ],
+            "client_attrs": {}
+        }
+    },
+    "api_version": "3.0",
+    "metadata": {
+        "spec_version": 1,
+        "kind": "blueprint",
+        "name": "Sap_Control_Centre",
+        "project_reference": {
+            "type": "project",
+            "uuid": "2e8e5b84-448b-4c55-9129-d838f97efb19",
+            "name": "dnd-jg"
+        }
+    }
+}
