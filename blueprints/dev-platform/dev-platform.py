@@ -51,6 +51,16 @@ class dev_station_package(Package):
     @action
     def __install__():
 
+        CalmTask.Exec.escript(
+            filename="scripts/escript/expand_disk.py",
+            name="ExpandDisk"
+        )
+
+        CalmTask.Exec.ssh(
+            filename="scripts/shell/base_system.sh",
+            name="BaseSystem"
+        )
+
         CalmTask.Exec.ssh(
             filename="scripts/shell/docker_install.sh",
             name="DockerInstall"
@@ -126,6 +136,12 @@ class Default(Profile):
         label="Your SSH public key",
         is_mandatory=True,
         runtime=True
+    )
+
+    ROOT_DISK_SIZE = Variable.Simple.int(
+        '8',
+        label="New OS root partition size",
+        is_hidden=True
     )
 
 

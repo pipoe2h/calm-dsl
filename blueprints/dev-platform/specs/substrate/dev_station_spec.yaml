@@ -57,6 +57,7 @@ resources:
           runcmd:
             - [ sh, -c, cp /etc/skel/.* /home/@@{DEVELOPER_USERNAME}@@ ]
             - [ chown, -R, '@@{DEVELOPER_USERNAME}@@:@@{DEVELOPER_USERNAME}@@', /home/@@{DEVELOPER_USERNAME}@@ ]
+            - [ sh, -c, ( sleep 30 ; eject ) & ]
     nic_list:
     - network_function_nic_type: INGRESS
       nic_type: NORMAL_NIC
