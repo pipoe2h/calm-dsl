@@ -134,6 +134,13 @@ class Default(Profile):
         runtime=True
     )
 
+    DAVE_DEMO = Variable.Simple.string(
+        'dave',
+        name='DAVE_DEMO',
+        is_mandatory=True,
+        runtime=True
+    )
+
     @action
     def Patch_Image():
         
