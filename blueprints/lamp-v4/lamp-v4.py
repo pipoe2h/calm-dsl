@@ -24,7 +24,7 @@ from calm.dsl.builtins import read_ahv_spec
 CENTOS_USER = "centos"
 CENTOS_PASSWORD = read_local_file(os.path.join("secrets", "centos_os"))
 default_credential = basic_cred(CENTOS_USER, CENTOS_PASSWORD, name='CENTOS', default=True)
-
+Cred_OS = basic_cred(CENTOS_USER, CENTOS_PASSWORD, name='Cred_OS')
 
 class MySQLService(Service):
     @action
