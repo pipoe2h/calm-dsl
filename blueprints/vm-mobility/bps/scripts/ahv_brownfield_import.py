@@ -16,6 +16,9 @@ BP_SPEC = {
             "kind": "project",
             "uuid": ""
         },
+        "categories": {
+            "TemplateType": "Vm"
+        },
         "uuid": "00000000-0000-0000-0000-000000000000"
     },
     "spec": {
