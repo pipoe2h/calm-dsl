@@ -144,6 +144,12 @@ class Default(Profile):
         is_hidden=True
     )
 
+    DOCKER_REGISTRIES_CIDR = Variable.Simple.string(
+        '192.168.0.0/16',
+        label="Network CIDR hosting insecure registries (self-signed)",
+        is_hidden=True
+    )
+
 
 class Developer_Station(Blueprint):
     """Developer Station"""

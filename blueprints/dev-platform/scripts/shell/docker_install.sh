@@ -9,7 +9,8 @@ sudo usermod -aG docker @@{DEVELOPER_USERNAME}@@
 
 echo '
 {
- "data-root": "/home/@@{DEVELOPER_USERNAME}@@/data_disk/docker"
+ "data-root": "/home/@@{DEVELOPER_USERNAME}@@/data_disk/docker",
+ "insecure-registries": ["@@{DOCKER_REGISTRIES_CIDR}@@"]
 }' | sudo tee /etc/docker/daemon.json
 
 sudo systemctl restart docker
