@@ -16,7 +16,7 @@ stages:
 - stage: Deploy
   jobs:
   - deployment: DeployCalm
-    displayName: 'Deploy Blueprint in Calm'
+    displayName: 'Deploy Calm Blueprint'
     pool: 'default'
     environment: 'dev'
     strategy:
