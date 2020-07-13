@@ -10,7 +10,7 @@ variables:
 trigger:
   branches:
     include:
-    - master
+    - azure-pipelines
 
 stages:
 - stage: Deploy
