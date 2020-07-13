@@ -12,16 +12,8 @@ trigger:
 pool: 'default'
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
-
 - script: |
     docker run --rm ntnx/calm-dsl /bin/bash -c " \
       calm init dsl -i $(pc_ip) -P $(pc_port) -u $(pc_user) -p $(pc_pass) -pj $(calm_projectName) \
-      && calm get bps"
-  displayName: 'Docker'
+      && calm launch marketplace_item 'CentOS 7' -a $(Build.BuildId)_CentOS7 -pj $(calm_projectName) -i"
+  displayName: 'Calm DSL'
