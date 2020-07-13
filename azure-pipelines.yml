@@ -20,5 +20,5 @@ steps:
 - script: |
     docker run --rm ntnx/calm-dsl /bin/bash -c " \
       calm init dsl -i $(pc_ip) -P $(pc_port) -u $(pc_user) -p $(pc_password) -pj $(calm_project) \
-      && calm launch bp -h"
+      && calm get bps"
   displayName: 'Docker'
