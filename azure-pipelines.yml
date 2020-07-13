@@ -2,6 +2,7 @@
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
+name: 0.1.$(Rev:r)
 
 variables:
 - group: theale-prism-central
@@ -9,11 +10,22 @@ variables:
 trigger:
 - master
 
-pool: 'default'
+stages:
+- stage: Deploy
+  jobs:
+  - deployment: DeployCalm
+    displayName: 'Deploy Blueprint in Calm'
+    pool: 'default'
+    environment: 'dev'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: none
 
-steps:
-- script: |
-    docker run --rm ntnx/calm-dsl /bin/bash -c " \
-      calm init dsl -i $(pc_ip) -P $(pc_port) -u $(pc_user) -p $(pc_pass) -pj $(calm_projectName) \
-      && calm launch marketplace_item 'CentOS 7' -a $(Build.BuildId)_CentOS7 -pj $(calm_projectName) -i"
-  displayName: 'Calm DSL'
+          - displayName: 'Calm DSL'
+            script: |
+              docker run --rm ntnx/calm-dsl /bin/bash -c " \
+                calm init dsl -i $(pc_ip) -P $(pc_port) -u $(pc_user) -p $(pc_pass) -pj $(calm_projectName) \
+                && calm launch marketplace_item 'CentOS 7' -a $(Build.BuildId)_CentOS7 -pj $(calm_projectName) -i"
+            
