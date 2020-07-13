@@ -8,7 +8,9 @@ variables:
 - group: theale-prism-central
 
 trigger:
-- master
+  branches:
+    include:
+    - master
 
 stages:
 - stage: Deploy
