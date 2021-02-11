@@ -1,0 +1,10 @@
+#cloud-config
+hostname: @@{name}@@
+users:
+    - name: @@{CRED_OS.username}@@
+      ssh-authorized-keys:
+        - @@{CRED_OS.public_key}@@
+      sudo: ['ALL=(ALL) NOPASSWD:ALL']
+runcmd:
+    - yum -y install lvm2
+    - [eject]
