@@ -10,7 +10,7 @@ except ImportError:
 TEMPLATE_PATH = os.getenv("ANTHOS_TEMPLATE_PATH") or "example.yaml"
 SSH_KEY = os.getenv("ANTHOS_SSH_KEY") or "/home/nutanix/.ssh/id_rsa"
 CLUSTER_TYPE = os.getenv("ANTHOS_CLUSTER_TYPE") or "hybrid"
-CONTROLPLANE_ADDRESSES = os.getenv("ANTHOS_CONTROLPLANE_ADDRESSES").split()
+CONTROLPLANE_ADDRESSES = os.getenv("ANTHOS_CONTROLPLANE_ADDRESSES").split(",")
 CONTROLPLANE_VIP = os.getenv("ANTHOS_CONTROLPLANE_VIP")
 PODS_NETWORK = os.getenv("ANTHOS_PODS_NETWORK") or "172.30.0.0/16"
 SERVICES_NETWORK = os.getenv("ANTHOS_SERVICES_NETWORK") or "172.31.0.0/16"
@@ -19,7 +19,7 @@ LB_ADDRESSPOOL = os.getenv("ANTHOS_LB_ADDRESSPOOL")
 LVPNODEMOUNTS = os.getenv("ANTHOS_LVPNODEMOUNTS") or "/home/nutanix/localpv-disk"
 LVPSHARE = os.getenv("ANTHOS_LVPSHARE") or "/home/nutanix/localpv-share"
 LOGINUSER = os.getenv("ANTHOS_LOGINUSER") or "nutanix"
-WORKERNODES_ADDRESSES = os.getenv("ANTHOS_WORKERNODES_ADDRESSES").split()
+WORKERNODES_ADDRESSES = os.getenv("ANTHOS_WORKERNODES_ADDRESSES").split(",")
 
 
 with open(TEMPLATE_PATH, 'r+') as f:
