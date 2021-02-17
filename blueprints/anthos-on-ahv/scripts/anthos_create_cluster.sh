@@ -25,7 +25,7 @@ cd ~/baremetal
 curl -s $PYTHON_ANTHOS_GENCONFIG | python2
 
 # Create Anthos Kubernetes cluster
-if ./bmctl create cluster -c $ANTHOS_CLUSTER_NAME ; then
+if ./bmctl create cluster -c $ANTHOS_CLUSTER_NAME > /dev/null ; then
     export KUBECONFIG=$HOME/baremetal/bmctl-workspace/${ANTHOS_CLUSTER_NAME}/${ANTHOS_CLUSTER_NAME}-kubeconfig
     echo "KUBECONFIG=$KUBECONFIG"
 else

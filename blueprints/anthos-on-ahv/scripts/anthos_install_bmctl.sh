@@ -13,7 +13,7 @@ gsutil cp gs://anthos-baremetal-release/bmctl/1.6.1/linux-amd64/bmctl bmctl
 chmod a+x bmctl
 
 # Create Anthos configuration template
-echo $os_secret > ~/.ssh/id_rsa
+echo "$os_secret" > ~/.ssh/id_rsa
 chmod 600 ~/.ssh/id_rsa
 
 export GOOGLE_APPLICATION_CREDENTIALS="$tmpfile"

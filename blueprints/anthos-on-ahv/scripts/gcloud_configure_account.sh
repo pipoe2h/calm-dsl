@@ -5,7 +5,7 @@ secret='@@{CRED_GCLOUD.secret}@@'
 
 tmpfile=$(mktemp /tmp/gcloud-anthos.XXXXXX)
 exec 3>"$tmpfile"
-echo $secret >&3
+echo "$secret" >&3
 exec 3>&-
 
 project_id=$(grep project_id $tmpfile | awk -F'"' '{print $4}')
