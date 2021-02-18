@@ -24,6 +24,20 @@ CRED_OS = basic_cred(
     default=True,
 )
 
+PE_USERNAME = os.getenv("CALMDSL_PE_USERNAME") or read_local_file(
+    os.path.join("secrets", "pe_username")
+)
+PE_PASSWORD = os.getenv("CALMDSL_PE_PASSWORD") or read_local_file(
+    os.path.join("secrets", "pe_password")
+)
+CRED_PE = basic_cred(
+    PE_USERNAME,
+    PE_PASSWORD,
+    name="CRED_PE",
+    type="PASSWORD",
+    default=False,
+)
+
 GCLOUD_ACCOUNT = os.getenv("CALMDSL_GCLOUD_ACCOUNT") or read_local_file(
     os.path.join("secrets", "gcloud_account")
 )
@@ -171,6 +185,7 @@ class AdminVM(Service):
     def __create__():
         AdminVM.Anthos_Create_Cluster(name="Anthos_Create_Cluster")
         AdminVM.GKE_Configure_CloudConsole(name="GKE_Configure_CloudConsole")
+        AdminVM.NTNXK8S_Install_CSI(name="NTNXK8S_Install_CSI")
 
     @action
     def Gcloud_Install_SDK():
@@ -219,6 +234,13 @@ class AdminVM(Service):
         CalmTask.Exec.escript(
             filename="scripts/ntnxpc_extend_disk.py",
             name="Extend_OS_Disk"
+        )
+
+    @action
+    def NTNXK8S_Install_CSI():
+        CalmTask.Exec.ssh(
+            filename="scripts/ntnxk8s_install_csi.sh",
+            name="NTNXK8S_Install_CSI"
         )
 
     GCP_PROJECT_ID = Variable.Simple.string(
@@ -337,7 +359,8 @@ class Default(Profile):
         "192.168.4.3-192.168.4.5",
         name="ANTHOS_LB_ADDRESSPOOL",
         label="Anthos Load Balancing pool",
-        description="This is the IP address range for Load Balancing. Format: XXX.XXX.XXX.XXX-YYY.YYY.YYY.YYY",
+        description="""This is the IP address range for Load Balancing. 
+            Format: XXX.XXX.XXX.XXX-YYY.YYY.YYY.YYY""",
         is_mandatory=True,
         runtime=True
     )
@@ -365,15 +388,56 @@ class Default(Profile):
         "https://raw.githubusercontent.com/pipoe2h/calm-dsl/anthos-on-ahv/blueprints/anthos-on-ahv/scripts/anthos_generate_config.py",
         name="PYTHON_ANTHOS_GENCONFIG",
         label="Python Parser URL",
-        description="This script is hosted externally and produce an Anthos configuration file for cluster creation with user provided inputs during launch",
+        description="""This script is hosted externally and produce an Anthos configuration 
+            file for cluster creation with user provided inputs during launch""",
         is_hidden=True
     )
 
+    NTNX_CSI_URL = Variable.Simple.string(
+        "http://download.nutanix.com/csi/v2.2.0/csi-v2.2.0.tar.gz",
+        name="NTNX_CSI_URL",
+        label="Nutanix CSI Driver URL",
+        is_hidden=True
+    )
+
+    NTNX_PE_IP = Variable.Simple.string(
+        "192.168.2.40",
+        name="NTNX_PE_IP",
+        label="Prism Element VIP",
+        description="This is needed for the CSI driver to create persistent volumes via the API",
+        is_hidden=True
+    )
+
+    NTNX_PE_PORT = Variable.Simple.string(
+        "9440",
+        name="NTNX_PE_PORT",
+        label="Prism Element port",
+        is_hidden=True
+    )
+
+    NTNX_PE_DATASERVICE_IP = Variable.Simple.string(
+        "192.168.2.41",
+        name="NTNX_PE_DATASERVICE_IP",
+        label="Data service IP address",
+        description="""Data service is required to allow iSCSI connectivity between the 
+            Kubernetes pods and the volumes created by CSI""",
+        is_hidden=True
+    )
+
+    NTNX_PE_STORAGE_CONTAINER = Variable.Simple.string(
+        "SelfServiceContainer",
+        name="NTNX_PE_STORAGE_CONTAINER",
+        label="Storage Container in Prism Element",
+        description="""This is the Nutanix Storage Container where the requested Persistent Volume Claims will
+            get their volumes created. You can enable things like compression and deduplication in a Storage Container""",
+        is_hidden=True
+    )
 
 class Anthos_on_AHV(Blueprint):
 
     credentials = [
         CRED_OS,
+        CRED_PE,
         CRED_GCLOUD
     ]
     services = [
