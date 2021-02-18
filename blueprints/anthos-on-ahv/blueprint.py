@@ -394,7 +394,7 @@ class Default(Profile):
     )
 
     NTNX_CSI_URL = Variable.Simple.string(
-        "http://download.nutanix.com/csi/v2.2.0/csi-v2.2.0.tar.gz",
+        "http://download.nutanix.com/csi/v2.3.1/csi-v2.3.1.tar.gz",
         name="NTNX_CSI_URL",
         label="Nutanix CSI Driver URL",
         is_hidden=True

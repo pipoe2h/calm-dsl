@@ -25,6 +25,3 @@ kubectl create clusterrolebinding ${KSA_NAME}-reader \
 
 kubectl create clusterrolebinding ${KSA_NAME}-admin \
 --clusterrole cluster-admin --serviceaccount default:${KSA_NAME}
-
-# SECRET_NAME=$(kubectl get serviceaccount google-cloud-console -o jsonpath='{$.secrets[0].name}')
-# kubectl get secret ${SECRET_NAME} -o jsonpath='{$.data.token}' | base64 --decode

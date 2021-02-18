@@ -26,7 +26,7 @@ curl -s -o csi.tar.gz \
 mkdir -p csi && tar xvf csi.tar.gz -C csi --strip-components 1
 
 kubectl create -f csi/ntnx-csi-rbac.yaml
-kubectl create -f https://raw.githubusercontent.com/pipoe2h/calm-dsl/anthos-on-ahv/blueprints/anthos-on-ahv/scripts/ntnx-csi-node.yaml
+kubectl create -f csi/ntnx-csi-node.yaml
 kubectl create -f csi/ntnx-csi-provisioner.yaml
 
 export CSI_KEY=$(echo -n "${NTNX_PE_IP}:${NTNX_PE_PORT}:${NTNX_PE_USERNAME}:${NTNX_PE_PASSWORD}" | base64)
