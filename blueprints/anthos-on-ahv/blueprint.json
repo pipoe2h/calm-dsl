@@ -1,7 +1,7 @@
 {
     "status": {},
     "contains_secrets": false,
-    "product_version": "3.2.0",
+    "product_version": "3.1.1",
     "spec": {
         "description": "",
         "resources": {
@@ -1646,7 +1646,7 @@
                                         "kind": "app_package",
                                         "type": "",
                                         "name": "AHV_CENTOS",
-                                        "uuid": "ac6ee8ee-9387-4b80-8da7-e4a1cdd65b24"
+                                        "uuid": "fb4ef7d8-ffc2-4017-9240-201fe3790020"
                                     },
                                     "type": "",
                                     "disk_size_mib": 131072,
@@ -1748,7 +1748,7 @@
                                         "kind": "app_package",
                                         "type": "",
                                         "name": "AHV_CENTOS",
-                                        "uuid": "ac6ee8ee-9387-4b80-8da7-e4a1cdd65b24"
+                                        "uuid": "fb4ef7d8-ffc2-4017-9240-201fe3790020"
                                     },
                                     "type": "",
                                     "disk_size_mib": 131072,
@@ -1850,7 +1850,7 @@
                                         "kind": "app_package",
                                         "type": "",
                                         "name": "AHV_CENTOS",
-                                        "uuid": "ac6ee8ee-9387-4b80-8da7-e4a1cdd65b24"
+                                        "uuid": "fb4ef7d8-ffc2-4017-9240-201fe3790020"
                                     },
                                     "type": "",
                                     "disk_size_mib": 131072,
@@ -1890,7 +1890,7 @@
                     "name": "CRED_OS"
                 },
                 {
-                    "username": "pe_user_admin",
+                    "username": "user_admin_account",
                     "description": "",
                     "type": "PASSWORD",
                     "secret": {
@@ -1902,7 +1902,7 @@
                     "name": "CRED_PE"
                 },
                 {
-                    "username": "svc_account_name@project.iam.gserviceaccount.com",
+                    "username": "svc_account_name@gcp_project.iam.gserviceaccount.com",
                     "description": "",
                     "type": "KEY",
                     "secret": {
@@ -2533,13 +2533,17 @@
                             "is_hidden": false
                         },
                         {
+                            "regex": {
+                                "should_validate": true,
+                                "value": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
+                            },
                             "val_type": "STRING",
                             "is_mandatory": true,
                             "description": "This is the IP address for Kubernetes API. Format: XXX.XXX.XXX.XXX",
                             "data_type": "BASE",
                             "type": "LOCAL",
                             "name": "ANTHOS_CONTROLPLANE_VIP",
-                            "value": "192.168.4.2",
+                            "value": "",
                             "label": "Anthos cluster VIP",
                             "attrs": {
                                 "type": ""
@@ -2550,6 +2554,10 @@
                             "is_hidden": false
                         },
                         {
+                            "regex": {
+                                "should_validate": true,
+                                "value": "^([0-9]{1,3}\\.){3}[0-9]{1,3}(\\\/([0-9]|[1-2][0-9]|3[0-2]))?$"
+                            },
                             "val_type": "STRING",
                             "is_mandatory": true,
                             "description": "This is the network for your pods. Preferably do not overlap with other networks. \n            CIDR format: XXX.XXX.XXX.XXX\/XX",
@@ -2567,6 +2575,10 @@
                             "is_hidden": false
                         },
                         {
+                            "regex": {
+                                "should_validate": true,
+                                "value": "^([0-9]{1,3}\\.){3}[0-9]{1,3}(\\\/([0-9]|[1-2][0-9]|3[0-2]))?$"
+                            },
                             "val_type": "STRING",
                             "is_mandatory": true,
                             "description": "This is the network for your services. Preferably do not overlap with other networks. \n            CIDR format: XXX.XXX.XXX.XXX\/XX",
@@ -2584,13 +2596,17 @@
                             "is_hidden": false
                         },
                         {
+                            "regex": {
+                                "should_validate": true,
+                                "value": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
+                            },
                             "val_type": "STRING",
                             "is_mandatory": true,
                             "description": "This is the IP address for Kubernetes Ingress. \n            This address MUST be within the load balancing pool. Format: XXX.XXX.XXX.XXX",
                             "data_type": "BASE",
                             "type": "LOCAL",
                             "name": "ANTHOS_INGRESS_VIP",
-                            "value": "192.168.4.3",
+                            "value": "",
                             "label": "Anthos Kubernetes Ingress VIP",
                             "attrs": {
                                 "type": ""
@@ -2607,7 +2623,7 @@
                             "data_type": "BASE",
                             "type": "LOCAL",
                             "name": "ANTHOS_LB_ADDRESSPOOL",
-                            "value": "192.168.4.3-192.168.4.5",
+                            "value": "",
                             "label": "Anthos Load Balancing pool",
                             "attrs": {
                                 "type": ""
@@ -2681,13 +2697,17 @@
                             "is_hidden": true
                         },
                         {
+                            "regex": {
+                                "should_validate": true,
+                                "value": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
+                            },
                             "val_type": "STRING",
                             "is_mandatory": false,
                             "description": "This is needed for the CSI driver to create persistent volumes via the API",
                             "data_type": "BASE",
                             "type": "LOCAL",
                             "name": "NTNX_PE_IP",
-                            "value": "192.168.2.40",
+                            "value": "",
                             "label": "Prism Element VIP",
                             "attrs": {
                                 "type": ""
@@ -2709,13 +2729,17 @@
                             "is_hidden": true
                         },
                         {
+                            "regex": {
+                                "should_validate": true,
+                                "value": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
+                            },
                             "val_type": "STRING",
                             "is_mandatory": false,
                             "description": "Data service is required to allow iSCSI connectivity between the \n            Kubernetes pods and the volumes created by CSI",
                             "data_type": "BASE",
                             "type": "LOCAL",
                             "name": "NTNX_PE_DATASERVICE_IP",
-                            "value": "192.168.2.41",
+                            "value": "",
                             "label": "Data service IP address",
                             "attrs": {
                                 "type": ""
@@ -2729,7 +2753,7 @@
                             "data_type": "BASE",
                             "type": "LOCAL",
                             "name": "NTNX_PE_STORAGE_CONTAINER",
-                            "value": "SelfServiceContainer",
+                            "value": "",
                             "label": "Storage Container in Prism Element",
                             "attrs": {
                                 "type": ""
@@ -2750,10 +2774,10 @@
     },
     "api_version": "3.0",
     "metadata": {
-        "last_update_time": "1613743331004740",
+        "last_update_time": "1613761171136234",
         "kind": "blueprint",
         "spec_version": 1,
-        "creation_time": "1613743323419796",
+        "creation_time": "1613761159754885",
         "name": "Anthos_on_AHV"
     }
 }

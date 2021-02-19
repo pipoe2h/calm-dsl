@@ -317,9 +317,11 @@ class Default(Profile):
     )
 
     ANTHOS_CONTROLPLANE_VIP = Variable.Simple.string(
-        "192.168.4.2",
+        "",
         name="ANTHOS_CONTROLPLANE_VIP",
         label="Anthos cluster VIP",
+        regex="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$",
+        validate_regex=True,
         description="This is the IP address for Kubernetes API. Format: XXX.XXX.XXX.XXX",
         is_mandatory=True,
         runtime=True
@@ -329,6 +331,8 @@ class Default(Profile):
         "172.30.0.0/16",
         name="ANTHOS_PODS_NETWORK",
         label="Anthos Kubernetes pods network",
+        regex="^([0-9]{1,3}\.){3}[0-9]{1,3}(\/([0-9]|[1-2][0-9]|3[0-2]))?$",
+        validate_regex=True,
         description="""This is the network for your pods. Preferably do not overlap with other networks. 
             CIDR format: XXX.XXX.XXX.XXX/XX""",
         is_mandatory=True,
@@ -339,6 +343,8 @@ class Default(Profile):
         "172.31.0.0/16",
         name="ANTHOS_SERVICES_NETWORK",
         label="Anthos Kubernetes services network",
+        regex="^([0-9]{1,3}\.){3}[0-9]{1,3}(\/([0-9]|[1-2][0-9]|3[0-2]))?$",
+        validate_regex=True,
         description="""This is the network for your services. Preferably do not overlap with other networks. 
             CIDR format: XXX.XXX.XXX.XXX/XX""",
         is_mandatory=True,
@@ -346,9 +352,11 @@ class Default(Profile):
     )
 
     ANTHOS_INGRESS_VIP = Variable.Simple.string(
-        "192.168.4.3",
+        "",
         name="ANTHOS_INGRESS_VIP",
         label="Anthos Kubernetes Ingress VIP",
+        regex="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$",
+        validate_regex=True,
         description="""This is the IP address for Kubernetes Ingress. 
             This address MUST be within the load balancing pool. Format: XXX.XXX.XXX.XXX""",
         is_mandatory=True,
@@ -356,7 +364,7 @@ class Default(Profile):
     )
 
     ANTHOS_LB_ADDRESSPOOL = Variable.Simple.string(
-        "192.168.4.3-192.168.4.5",
+        "",
         name="ANTHOS_LB_ADDRESSPOOL",
         label="Anthos Load Balancing pool",
         description="""This is the IP address range for Load Balancing. 
@@ -403,9 +411,11 @@ class Default(Profile):
     )
 
     NTNX_PE_IP = Variable.Simple.string(
-        "192.168.2.40",
+        "",
         name="NTNX_PE_IP",
         label="Prism Element VIP",
+        regex="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$",
+        validate_regex=True,
         description="This is needed for the CSI driver to create persistent volumes via the API",
         is_hidden=True
     )
@@ -418,16 +428,18 @@ class Default(Profile):
     )
 
     NTNX_PE_DATASERVICE_IP = Variable.Simple.string(
-        "192.168.2.41",
+        "",
         name="NTNX_PE_DATASERVICE_IP",
         label="Data service IP address",
+        regex="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$",
+        validate_regex=True,
         description="""Data service is required to allow iSCSI connectivity between the 
             Kubernetes pods and the volumes created by CSI""",
         is_hidden=True
     )
 
     NTNX_PE_STORAGE_CONTAINER = Variable.Simple.string(
-        "SelfServiceContainer",
+        "",
         name="NTNX_PE_STORAGE_CONTAINER",
         label="Storage Container in Prism Element",
         description="""This is the Nutanix Storage Container where the requested Persistent Volume Claims will
