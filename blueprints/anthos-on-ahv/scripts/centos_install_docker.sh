@@ -1,5 +1,5 @@
 # Eject cloud-init
-eject
+sudo eject
 
 # Setting SELinux to permissive
 sudo setenforce 0

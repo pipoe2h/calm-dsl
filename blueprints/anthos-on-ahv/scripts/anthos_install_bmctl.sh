@@ -6,7 +6,6 @@ os_secret='@@{CRED_OS.secret}@@'
 # ============== DO NO CHANGE AFTER THIS ===============
 
 # Install Anthos CLI (bmctl)
-cd ~
 mkdir baremetal
 cd baremetal
 gsutil cp gs://anthos-baremetal-release/bmctl/1.6.1/linux-amd64/bmctl bmctl
@@ -17,8 +16,6 @@ echo "$os_secret" > ~/.ssh/id_rsa
 chmod 600 ~/.ssh/id_rsa
 
 export GOOGLE_APPLICATION_CREDENTIALS="$tmpfile"
-
-cd ~/baremetal
 
 ./bmctl create config -c $cluster_name \
   --enable-apis --create-service-accounts --project-id=$project_id

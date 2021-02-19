@@ -29,7 +29,6 @@ resources:
               sudo: ['ALL=(ALL) NOPASSWD:ALL']
         runcmd:
             - yum -y install lvm2
-        #    - [eject]
   nic_list:
   - network_function_nic_type: INGRESS
     nic_type: NORMAL_NIC

@@ -381,6 +381,7 @@ class Default(Profile):
         "128",
         name="OS_DISK_SIZE",
         label="OS disk size",
+        description="The minimum OS disk size MUST be 128GB, recommended by Google is 256GB",
         is_hidden=True
     )
 
@@ -389,14 +390,15 @@ class Default(Profile):
         name="PYTHON_ANTHOS_GENCONFIG",
         label="Python Parser URL",
         description="""This script is hosted externally and produce an Anthos configuration 
-            file for cluster creation with user provided inputs during launch""",
+            file for cluster creation with user provided inputs during launch.
+            DO NOT CHANGE default value unless you will host the script in an internal repository""",
         is_hidden=True
     )
 
     NTNX_CSI_URL = Variable.Simple.string(
         "http://download.nutanix.com/csi/v2.3.1/csi-v2.3.1.tar.gz",
         name="NTNX_CSI_URL",
-        label="Nutanix CSI Driver URL",
+        label="Nutanix CSI Driver URL. Minimum supported version is 2.3.1",
         is_hidden=True
     )
 
@@ -429,7 +431,9 @@ class Default(Profile):
         name="NTNX_PE_STORAGE_CONTAINER",
         label="Storage Container in Prism Element",
         description="""This is the Nutanix Storage Container where the requested Persistent Volume Claims will
-            get their volumes created. You can enable things like compression and deduplication in a Storage Container""",
+            get their volumes created. You can enable things like compression and deduplication in a Storage Container.
+            The recommendation is to create at least one storage container in Prism Element well identified for Karbon usage.
+            This will facilitate the search of persistent volumes when the environment scales""",
         is_hidden=True
     )
 

@@ -7,18 +7,18 @@ try:
 except ImportError:
     from yaml import Loader, Dumper
 
-TEMPLATE_PATH = os.getenv("ANTHOS_TEMPLATE_PATH") or "example.yaml"
-SSH_KEY = os.getenv("ANTHOS_SSH_KEY") or "/home/nutanix/.ssh/id_rsa"
-CLUSTER_TYPE = os.getenv("ANTHOS_CLUSTER_TYPE") or "hybrid"
+TEMPLATE_PATH = os.getenv("ANTHOS_TEMPLATE_PATH")
+SSH_KEY = os.getenv("ANTHOS_SSH_KEY")
+CLUSTER_TYPE = os.getenv("ANTHOS_CLUSTER_TYPE")
 CONTROLPLANE_ADDRESSES = os.getenv("ANTHOS_CONTROLPLANE_ADDRESSES").split(",")
 CONTROLPLANE_VIP = os.getenv("ANTHOS_CONTROLPLANE_VIP")
-PODS_NETWORK = os.getenv("ANTHOS_PODS_NETWORK") or "172.30.0.0/16"
-SERVICES_NETWORK = os.getenv("ANTHOS_SERVICES_NETWORK") or "172.31.0.0/16"
+PODS_NETWORK = os.getenv("ANTHOS_PODS_NETWORK")
+SERVICES_NETWORK = os.getenv("ANTHOS_SERVICES_NETWORK")
 INGRESS_VIP = os.getenv("ANTHOS_INGRESS_VIP")
 LB_ADDRESSPOOL = os.getenv("ANTHOS_LB_ADDRESSPOOL")
-LVPNODEMOUNTS = os.getenv("ANTHOS_LVPNODEMOUNTS") or "/home/nutanix/localpv-disk"
-LVPSHARE = os.getenv("ANTHOS_LVPSHARE") or "/home/nutanix/localpv-share"
-LOGINUSER = os.getenv("ANTHOS_LOGINUSER") or "nutanix"
+LVPNODEMOUNTS = os.getenv("ANTHOS_LVPNODEMOUNTS")
+LVPSHARE = os.getenv("ANTHOS_LVPSHARE")
+LOGINUSER = os.getenv("ANTHOS_LOGINUSER")
 WORKERNODES_ADDRESSES = os.getenv("ANTHOS_WORKERNODES_ADDRESSES").split(",")
 
 
