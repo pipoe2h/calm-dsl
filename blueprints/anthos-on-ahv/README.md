@@ -155,6 +155,8 @@ This method is for using the *blueprint.json* file in the main directory.
 
     * NTNX_PE_DATASERVICE_IP: Data service is required to allow iSCSI connectivity between the Kubernetes pods and the volumes created by CSI plugin
 
-    * NTNX_PE_STORAGE_CONTAINER: This is the Nutanix Storage Container where the requested Persistent Volume Claims will get their volumes created. You can enable things like compression and deduplication in a Storage Container. The recommendation is to create at least one storage container in Prism Element well identified for Karbon usage. This will facilitate the search of persistent volumes when the environment scales
+    * NTNX_PE_STORAGE_CONTAINER: This is the Nutanix Storage Container where the requested Persistent Volume Claims will get their volumes created. You can enable things like compression and deduplication in a Storage Container. The recommendation is to create at least one storage container in Prism Element well identified for Kubernetes usage. This will facilitate the search of persistent volumes when the environment scales
+
+6. Save the blueprint and launch. The complete deployment process takes about an hour. 
 
 ## Using DSL

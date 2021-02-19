@@ -432,7 +432,7 @@ class Default(Profile):
         label="Storage Container in Prism Element",
         description="""This is the Nutanix Storage Container where the requested Persistent Volume Claims will
             get their volumes created. You can enable things like compression and deduplication in a Storage Container.
-            The recommendation is to create at least one storage container in Prism Element well identified for Karbon usage.
+            The recommendation is to create at least one storage container in Prism Element well identified for Kubernetes usage.
             This will facilitate the search of persistent volumes when the environment scales""",
         is_hidden=True
     )
