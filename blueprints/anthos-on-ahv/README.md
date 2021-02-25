@@ -132,6 +132,13 @@ This method is for using the *blueprint.json* file in the main directory.
 
 6. Save the blueprint and launch. The complete deployment process takes about an hour. 
 
+7. Once deployed, the cluster is registered in Anthos but GKE is not logged in until you use the token for the service account created in Kubernetes. From your computer terminal run the following commands copying the token and using it in the GKE console (the service account name may vary depending if you changed the default value):
+
+    ```terminal
+    SECRET_NAME=$(kubectl get serviceaccount google-cloud-console -o jsonpath='{$.secrets[0].name}')
+    kubectl get secret ${SECRET_NAME} -o jsonpath='{$.data.token}' | base64 --decode
+    ```
+
 ## Using DSL
 
 For DSL you must clone the repository and use the branch *anthos-on-ahv*. Also, make sure your DSL is initialized beforehand, if you need help with this refer to this [post series](https://www.nutanix.dev/calm-dsl)
@@ -182,10 +189,17 @@ $ git checkout anthos-on-ahv
     $ calm create bp blueprint.py
     ```
 
-5. Launch
+5. Launch it. The complete deployment process takes about an hour. 
 
     ```terminal
     $ calm create app -f blueprint.py
+    ```
+
+6. Once deployed, the cluster is registered in Anthos but GKE is not logged in until you use the token for the service account created in Kubernetes. From your computer terminal run the following commands copying the token and using it in the GKE console (the service account name may vary depending if you changed the default value):
+
+    ```terminal
+    SECRET_NAME=$(kubectl get serviceaccount google-cloud-console -o jsonpath='{$.secrets[0].name}')
+    kubectl get secret ${SECRET_NAME} -o jsonpath='{$.data.token}' | base64 --decode
     ```
 
 ## Pending

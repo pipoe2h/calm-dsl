@@ -367,6 +367,8 @@ class Default(Profile):
         "",
         name="ANTHOS_LB_ADDRESSPOOL",
         label="Anthos Load Balancing pool",
+        regex="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)-(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$",
+        validate_regex=True,
         description="""This is the IP address range for Load Balancing. 
             Format: XXX.XXX.XXX.XXX-YYY.YYY.YYY.YYY""",
         is_mandatory=True,
@@ -424,6 +426,8 @@ class Default(Profile):
         "9440",
         name="NTNX_PE_PORT",
         label="Prism Element port",
+        regex="^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$",
+        validate_regex=True,
         is_hidden=True
     )
 
