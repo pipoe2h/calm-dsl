@@ -402,14 +402,16 @@ class Default(Profile):
         description="""This script is hosted externally and produce an Anthos configuration 
             file for cluster creation with user provided inputs during launch.
             DO NOT CHANGE default value unless you will host the script in an internal repository""",
-        is_hidden=True
+        is_mandatory=True,
+        runtime=True
     )
 
     NTNX_CSI_URL = Variable.Simple.string(
         "http://download.nutanix.com/csi/v2.3.1/csi-v2.3.1.tar.gz",
         name="NTNX_CSI_URL",
         label="Nutanix CSI Driver URL. Minimum supported version is 2.3.1",
-        is_hidden=True
+        is_mandatory=True,
+        runtime=True
     )
 
     NTNX_PE_IP = Variable.Simple.string(
@@ -419,7 +421,8 @@ class Default(Profile):
         regex="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$",
         validate_regex=True,
         description="This is needed for the CSI driver to create persistent volumes via the API",
-        is_hidden=True
+        is_mandatory=True,
+        runtime=True
     )
 
     NTNX_PE_PORT = Variable.Simple.string(
@@ -428,7 +431,8 @@ class Default(Profile):
         label="Prism Element port",
         regex="^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$",
         validate_regex=True,
-        is_hidden=True
+        is_mandatory=True,
+        runtime=True
     )
 
     NTNX_PE_DATASERVICE_IP = Variable.Simple.string(
@@ -439,7 +443,8 @@ class Default(Profile):
         validate_regex=True,
         description="""Data service is required to allow iSCSI connectivity between the 
             Kubernetes pods and the volumes created by CSI""",
-        is_hidden=True
+        is_mandatory=True,
+        runtime=True
     )
 
     NTNX_PE_STORAGE_CONTAINER = Variable.Simple.string(
@@ -450,7 +455,8 @@ class Default(Profile):
             get their volumes created. You can enable things like compression and deduplication in a Storage Container.
             The recommendation is to create at least one storage container in Prism Element well identified for Kubernetes usage.
             This will facilitate the search of persistent volumes when the environment scales""",
-        is_hidden=True
+        is_mandatory=True,
+        runtime=True
     )
 
 class Anthos_on_AHV(Blueprint):

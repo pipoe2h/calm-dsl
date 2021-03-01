@@ -67,6 +67,8 @@ This automation project helps you to deploy an Anthos Kubernetes cluster on Nuta
 
     * A project with Owner role
 
+    * The project must have enabled Monitoring - <https://console.cloud.google.com/monitoring>
+
     * A service account - <https://console.cloud.google.com/iam-admin/serviceaccounts/create>
 
         * Role: Project Owner
@@ -132,7 +134,7 @@ This method is for using the *blueprint.json* file in the main directory.
 
 6. Save the blueprint and launch. The complete deployment process takes about an hour. 
 
-7. Once deployed, the cluster is registered in Anthos but GKE is not logged in until you use the token for the service account created in Kubernetes. From your computer terminal run the following commands copying the token and using it in the GKE console (the service account name may vary depending if you changed the default value):
+7. Once deployed, the cluster is registered in Anthos but GKE is not logged in until you use the token for the service account created in Kubernetes. SSH into the *Admin virtual machine* and run the following commands (you will need to grab the KUBECONFIG from the admin virtual machine). Copy the token and use it in the GKE console (the service account name may vary depending if you changed the default value):
 
     ```terminal
     SECRET_NAME=$(kubectl get serviceaccount google-cloud-console -o jsonpath='{$.secrets[0].name}')
