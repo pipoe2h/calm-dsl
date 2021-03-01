@@ -15,7 +15,7 @@ This automation project helps you to deploy an Anthos Kubernetes cluster on Nuta
 
 * Type: hybrid - <https://cloud.google.com/anthos/clusters/docs/bare-metal/1.6/installing/install-prep#hybrid_cluster_deployment>
 
-* Number of virtual machines: 6
+* Number of virtual machines: 6 (Total resources: 24 vCPU / 192 GB memory / 768 GB storage )
 
     * 1 x Admin
 
