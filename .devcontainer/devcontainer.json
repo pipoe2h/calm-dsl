@@ -1,11 +1,15 @@
 {
-	"name": "Python 3 Sample",
+	"name": "Calm DSL Devstation",
 	"build": {
 		"dockerfile": "Dockerfile",
 		"context": "..",
 		// Update 'VARIANT' to pick a Python version. Rebuild the container 
 		// if it already exists to update. Available variants: 3, 3.6, 3.7, 3.8 
 		"args": { "VARIANT": "3.7" }
+	},
+
+	"containerEnv": {
+		"CALM_DSL_LOG_LEVEL": "INFO"
 	},
 
 	// Set *default* container specific settings.json values on container create.
@@ -33,14 +37,15 @@
 
 	// 
 	"mounts": [
-		"source=${localWorkspaceFolder}/.calm,target=/root/.calm,type=bind,consistency=delegated"
+		"source=${localWorkspaceFolder}/.calm,target=/root/.calm,type=bind,consistency=delegated",
+		"source=${localEnv:HOME}/.ssh/id_rsa,target=/root/.ssh/id_rsa,type=bind,consistency=cached"
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [9000],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "pip3 install -r requirements.txt"
+	"postCreateCommand": "pip3 install -r requirements.txt ; pip3 install --upgrade requests"
 
 	// Comment out to connect as root instead.
 	// "remoteUser": "vscode"
