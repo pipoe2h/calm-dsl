@@ -1,0 +1,14 @@
+spec:
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      targetPort: 80
+      name: web
+      port: 80
+  selector:
+    app: '@@{calm_application_name}@@'
+metadata:
+  labels:
+    app: '@@{calm_application_name}@@'
+  namespace: '@@{KUBERNETES_NAMESPACE_NAME}@@'
+  name: '@@{calm_application_name}@@'

@@ -1,0 +1,29 @@
+metadata:
+  labels:
+    app: '@@{calm_application_name}@@'
+  namespace: '@@{KUBERNETES_NAMESPACE_NAME}@@'
+  name: '@@{calm_application_name}@@'
+spec:
+  replicas: '1'
+  selector:
+    matchLabels:
+      app: '@@{calm_application_name}@@'
+  template:
+    metadata:
+      labels:
+        app: '@@{calm_application_name}@@'
+      namespace: '@@{KUBERNETES_NAMESPACE_NAME}@@'
+      name: ApacheK8s
+    spec:
+      restartPolicy: Always
+      dnsPolicy: ClusterFirst
+      containers:
+      - name: webpage
+        ports:
+        - protocol: TCP
+          containerPort: 80
+        image: '@@{KUBERNETES_DEPLOYMENT_CONTAINER_IMAGE}@@'
+        imagePullPolicy: Always
+        env:
+        - name: PLATFORM
+          value: "k8s"

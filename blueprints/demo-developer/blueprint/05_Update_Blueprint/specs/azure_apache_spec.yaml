@@ -1,0 +1,53 @@
+resources:
+  vm_name: "@@{calm_application_name}@@-azure-web-@@{calm_array_index}@@"
+  account_uuid: 9b4a2081-7693-af7b-e1c2-5e3d8cad353f
+  hw_profile:
+    max_data_disk_count: 4
+    vm_size: Standard_B2s
+  location: uksouth
+  rg_operation: use_existing
+  nw_profile:
+    nic_list:
+    - nic_name: nic-@@{calm_unique_hash}@@-@@{calm_array_index}@@-0
+      nsg_name: ""
+      nsg_id: /subscriptions/575bd7ed-618c-4a20-a50b-d4501433f5d2/resourceGroups/UK/providers/Microsoft.Network/networkSecurityGroups/calmnsg
+      private_ip_info:
+        ip_allocation_method: Dynamic
+      subnet_name: ""
+      subnet_id: /subscriptions/575bd7ed-618c-4a20-a50b-d4501433f5d2/resourceGroups/UK/providers/Microsoft.Network/virtualNetworks/calmvn/subnets/default
+      vnet_name: ""
+      vnet_id: /subscriptions/575bd7ed-618c-4a20-a50b-d4501433f5d2/resourceGroups/UK/providers/Microsoft.Network/virtualNetworks/calmvn
+      public_ip_info:
+        ip_allocation_method: Dynamic
+        dns_label: dns-@@{calm_unique_hash}@@-@@{calm_array_index}@@-0
+        ip_name: public-ip-@@{calm_unique_hash}@@-@@{calm_array_index}@@-0
+    primary_nic: -1
+  os_profile:
+    linux_config:
+      custom_data: |-
+        #cloud-config
+        hostname: @@{name}@@
+        users:
+            - name: @@{CRED_CENTOS.username}@@
+              ssh-authorized-keys:
+                - @@{CRED_CENTOS.public_key}@@
+              sudo: ['ALL=(ALL) NOPASSWD:ALL']
+      disable_password_auth: false
+  resource_group: "/subscriptions/575bd7ed-618c-4a20-a50b-d4501433f5d2/resourceGroups/UK"
+  storage_profile:
+    data_disk_list: []
+    image_details:
+      offer: CentOS
+      publisher: OpenLogic
+      sku: "7.7"
+      source_image_type: Marketplace
+      version: 7.7.20190920
+    is_managed: true
+    os_disk_details:
+      caching_type: ReadWrite
+      create_option: FromImage
+      lun: -1
+      name: os-@@{calm_unique_hash}@@-@@{calm_array_index}@@-disk
+      size_in_gb: -1
+      storage_type: ''
+name: ""
